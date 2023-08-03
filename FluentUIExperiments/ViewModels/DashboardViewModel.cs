@@ -24,6 +24,18 @@ public partial class DashboardViewModel : ObservableRecipient, INavigationAware
     private bool _inProgress;
 
     [ObservableProperty]
+    private bool _includeMcnWithCriminalAndSuspect;
+
+    [ObservableProperty]
+    private bool _includeAutoCompletedCriminalAndSuspect;
+
+    [ObservableProperty]
+    private bool _includeAutoCompletedJunkDocuments;
+
+    [ObservableProperty]
+    private bool _displayAvailableWork;
+
+    [ObservableProperty]
     private int _receivedValue;
 
     #endregion

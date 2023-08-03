@@ -57,7 +57,7 @@
                 SelectedValuePath="CountyId" />
             <Label
                 Margin="0,10,0,0"
-                Content="TOI"
+                Content="Type of Instrument"
                 Target="{Binding ElementName=CountyComboBox}" />
             <ComboBox
                 x:Name="CountyComboBox3"
@@ -68,12 +68,12 @@
                 SelectedValuePath="CountyId" />
             <Label
                 Margin="0,10,0,0"
-                Content="No Later Than"
+                Content="Before Date"
                 Target="{Binding ElementName=CountyComboBox}" />
             <DatePicker Margin="0,2,0,0" />
             <Label
                 Margin="0,10,0,0"
-                Content="Only DOF"
+                Content="Date of File"
                 Target="{Binding ElementName=CountyComboBox}" />
             <DatePicker Margin="0,2,0,0" />
             <Label
@@ -99,15 +99,16 @@
                 SelectedValuePath="CountyId" />
             <CheckBox
                 Margin="0,10,0,0"
-                Content="Include MCN with Criminal and Suspect"
+                Content="Include MCN with criminal and suspect"
+                FontSize="12" 
+                IsChecked="{Binding ViewModel.IncludeMcnWithCriminalAndSuspect}" />
+            <CheckBox
+                Margin="0,10,0,0"
+                Content="Include auto-completed criminal and suspect"
                 FontSize="12" />
             <CheckBox
                 Margin="0,10,0,0"
-                Content="Include Auto Completed Criminal and Suspect"
-                FontSize="12" />
-            <CheckBox
-                Margin="0,10,0,0"
-                Content="Include Auto Completed JUN"
+                Content="Include auto-completed junk documents"
                 FontSize="12" />
             <CheckBox
                 Margin="0,10,0,0"
