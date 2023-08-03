@@ -2,11 +2,15 @@
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Wpf.Ui.Common.Interfaces;
+using Wpf.Ui.Mvvm.Interfaces;
 
 namespace FluentUIExperiments.ViewModels;
-public partial class DashboardViewModel : ObservableObject, INavigationAware
+public partial class DashboardViewModel : ObservableRecipient, INavigationAware
 {
+    #region Fields
+
     [ObservableProperty]
     private ObservableCollection<County> _counties = new();
 
@@ -19,6 +23,13 @@ public partial class DashboardViewModel : ObservableObject, INavigationAware
     [ObservableProperty]
     private bool _inProgress;
 
+    [ObservableProperty]
+    private int _receivedValue;
+
+    #endregion
+
+    #region Constructors
+
     public DashboardViewModel()
     {
         Counties = new ObservableCollection<County>
@@ -28,6 +39,10 @@ public partial class DashboardViewModel : ObservableObject, INavigationAware
             new() { CountyId = 3, Name = "Brevard" },
         };
     }
+
+    #endregion
+
+    #region Commands
 
     [RelayCommand(CanExecute = nameof(CanCompletedUserEvents), AllowConcurrentExecutions = false, FlowExceptionsToTaskScheduler = true)]
     private async Task GetCompletedUserEventsAsync()
@@ -44,11 +59,34 @@ public partial class DashboardViewModel : ObservableObject, INavigationAware
         return true;
     }
 
+    #endregion
+
+    #region Methods
+
+    protected override void OnActivated()
+    {
+        Messenger.Register<DashboardViewModel, MyMessage>(this, MyMessageHandler);
+    }
+
+    private static void MyMessageHandler(DashboardViewModel viewModel, MyMessage message)
+    {
+        viewModel.ReceivedValue = message.Value;
+    }
+
+    protected override void OnDeactivated()
+    {
+        Messenger.Unregister<MyMessage>(this);
+    }
+
     public void OnNavigatedTo()
     {
+        IsActive = true;
     }
 
     public void OnNavigatedFrom()
     {
+        IsActive = false;
     }
+
+    #endregion
 }

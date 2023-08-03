@@ -9,12 +9,14 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="{Binding ViewModel.ApplicationTitle, Mode=OneWay}"
     Width="1100"
-    Height="650"
+    Height="1100"
+    MinWidth="619"
+    MinHeight="864"
+    d:Background="{DynamicResource ApplicationBackgroundBrush}"
     d:DataContext="{d:DesignInstance local:MainWindow,
                                      IsDesignTimeCreatable=True}"
-    d:Background="{DynamicResource ApplicationBackgroundBrush}"
-    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     ExtendsContentIntoTitleBar="True"
+    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     WindowBackdropType="Mica"
     WindowCornerPreference="Round"
     WindowStartupLocation="CenterScreen"
@@ -25,10 +27,11 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <ui:TitleBar Grid.Row="0"
-                     Title="{Binding ViewModel.ApplicationTitle, Mode=OneWay}"
-                     Icon="pack://application:,,,/Assets/applicationIcon-256.png"
-                     UseSnapLayout="True">
+        <ui:TitleBar
+            Title="{Binding ViewModel.ApplicationTitle, Mode=OneWay}"
+            Grid.Row="0"
+            Icon="pack://application:,,,/Assets/applicationIcon-256.png"
+            UseSnapLayout="True">
             <ui:TitleBar.Tray>
                 <ui:NotifyIcon
                     FocusOnLeftClick="True"
@@ -43,14 +46,16 @@
                 </ui:NotifyIcon>
             </ui:TitleBar.Tray>
         </ui:TitleBar>
-        <ProgressBar Grid.Row="1"
-                     IsIndeterminate="{Binding ViewModel.IsBusy, Mode=OneWay}" 
-                     Height="4" 
-                     Grid.ColumnSpan="2" 
-                     Margin="0,20,0,0" />
-        <Grid Grid.Row="2"
-              x:Name="RootMainGrid"
-              Margin="0">
+        <ProgressBar
+            Grid.Row="1"
+            Grid.ColumnSpan="2"
+            Height="4"
+            Margin="0,20,0,0"
+            IsIndeterminate="{Binding ViewModel.IsBusy, Mode=OneWay}" />
+        <Grid
+            x:Name="RootMainGrid"
+            Grid.Row="2"
+            Margin="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -63,10 +68,10 @@
                 </Grid.RowDefinitions>
                 <ui:NavigationFluent
                     x:Name="RootNavigation"
-                    Grid.Row="2" 
+                    Grid.Row="2"
                     Footer="{Binding ViewModel.NavigationFooter, Mode=TwoWay}"
                     Frame="{Binding ElementName=RootFrame, Mode=OneWay}"
-                    Items="{Binding ViewModel.NavigationItems, Mode=TwoWay}"/>
+                    Items="{Binding ViewModel.NavigationItems, Mode=TwoWay}" />
             </Grid>
             <Border Grid.Column="1" CornerRadius="8,0,0,0">
                 <Grid>
@@ -88,5 +93,6 @@
                 </Grid>
             </Border>
         </Grid>
+
     </Grid>
 </ui:UiWindow>

@@ -1,4 +1,5 @@
-﻿<ui:UiPage x:Class="FluentUIExperiments.Views.Pages.DashboardPage"
+﻿<ui:UiPage
+    x:Class="FluentUIExperiments.Views.Pages.DashboardPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,13 +7,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="DashboardPage"
-    d:DataContext="{d:DesignInstance local:DashboardPage, IsDesignTimeCreatable=False}"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
     d:Background="{DynamicResource ApplicationBackgroundBrush}"
+    d:DataContext="{d:DesignInstance local:DashboardPage,
+                                     IsDesignTimeCreatable=False}"
+    d:DesignHeight="1100"
+    d:DesignWidth="1100"
     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     mc:Ignorable="d">
-    <Grid VerticalAlignment="Top">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
@@ -20,41 +22,109 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Vertical"  Grid.ColumnSpan="1">
-                <Label Content="County" Target="{Binding ElementName=CountyComboBox}"/>
-                <ComboBox x:Name="CountyComboBox"
-                          DisplayMemberPath="Name" 
-                          SelectedValuePath="CountyId"
-                          SelectedItem="{Binding ViewModel.SelectedCounty}"
-                          ItemsSource="{Binding ViewModel.Counties}" 
-                          Margin="0,0,0,0" Width="200"/>
-            <Label Content="Type of Work" Target="{Binding ElementName=CountyComboBox}" Margin="0,10,0,0"/>
-                <ComboBox x:Name="CountyComboBox2"
-                          DisplayMemberPath="Name" 
-                          SelectedValuePath="CountyId"
-                          SelectedItem="{Binding ViewModel.SelectedCounty}"
-                          ItemsSource="{Binding ViewModel.Counties}" 
-                          Margin="0,0,0,0" Width="200"/>
-            <Label Content="TOI" Target="{Binding ElementName=CountyComboBox}" Margin="0,10,0,0"/>
-                <ComboBox x:Name="CountyComboBox3"
-                          DisplayMemberPath="Name" 
-                          SelectedValuePath="CountyId"
-                          SelectedItem="{Binding ViewModel.SelectedCounty}"
-                          ItemsSource="{Binding ViewModel.Counties}" 
-                          Margin="0,0,0,0" Width="200"/>
-            <Label Content="No Later Than" Target="{Binding ElementName=CountyComboBox}" Margin="0,10,0,0"/>
-                <DatePicker Width="200" Margin="0,2,0,0"/>
-            <Label Content="Only DOF" Target="{Binding ElementName=CountyComboBox}" Margin="0,10,0,0"/>
-                <DatePicker Width="200" Margin="0,2,0,0"/>
+        <!--<ProgressBar
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            Height="4"
+            Margin="0,20,0,0"
+            IsIndeterminate="{Binding ViewModel.IsBusy, Mode=OneWay}" />-->
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="1"
+            Orientation="Vertical">
+            <Label Content="County" Target="{Binding ElementName=CountyComboBox}" />
+            <ComboBox
+                x:Name="CountyComboBox"
+                Margin="0,0,0,0"
+                VerticalAlignment="Stretch"
+                DisplayMemberPath="Name"
+                ItemsSource="{Binding ViewModel.Counties}"
+                SelectedItem="{Binding ViewModel.SelectedCounty}"
+                SelectedValuePath="CountyId" />
+            <Label
+                Margin="0,10,0,0"
+                Content="Type of Work"
+                Target="{Binding ElementName=CountyComboBox}" />
+            <ComboBox
+                x:Name="CountyComboBox2"
+                Margin="0,0,0,0"
+                DisplayMemberPath="Name"
+                ItemsSource="{Binding ViewModel.Counties}"
+                SelectedItem="{Binding ViewModel.SelectedCounty}"
+                SelectedValuePath="CountyId" />
+            <Label
+                Margin="0,10,0,0"
+                Content="TOI"
+                Target="{Binding ElementName=CountyComboBox}" />
+            <ComboBox
+                x:Name="CountyComboBox3"
+                Margin="0,0,0,0"
+                DisplayMemberPath="Name"
+                ItemsSource="{Binding ViewModel.Counties}"
+                SelectedItem="{Binding ViewModel.SelectedCounty}"
+                SelectedValuePath="CountyId" />
+            <Label
+                Margin="0,10,0,0"
+                Content="No Later Than"
+                Target="{Binding ElementName=CountyComboBox}" />
+            <DatePicker Margin="0,2,0,0" />
+            <Label
+                Margin="0,10,0,0"
+                Content="Only DOF"
+                Target="{Binding ElementName=CountyComboBox}" />
+            <DatePicker Margin="0,2,0,0" />
+            <Label
+                Margin="0,10,0,0"
+                Content="Number of Units"
+                Target="{Binding ElementName=CountyComboBox}" />
+            <ComboBox
+                x:Name="CountyComboBox4"
+                Margin="0,0,0,0"
+                DisplayMemberPath="Name"
+                ItemsSource="{Binding ViewModel.Counties}"
+                SelectedItem="{Binding ViewModel.SelectedCounty}"
+                SelectedValuePath="CountyId" />
+            <Label
+                Margin="0,10,0,0"
+                Content="Count By"
+                Target="{Binding ElementName=CountyComboBox}" />
+            <ComboBox
+                Margin="0,0,0,0"
+                DisplayMemberPath="Name"
+                ItemsSource="{Binding ViewModel.Counties}"
+                SelectedItem="{Binding ViewModel.SelectedCounty}"
+                SelectedValuePath="CountyId" />
+            <CheckBox
+                Margin="0,10,0,0"
+                Content="Include MCN with Criminal and Suspect"
+                FontSize="12" />
+            <CheckBox
+                Margin="0,10,0,0"
+                Content="Include Auto Completed Criminal and Suspect"
+                FontSize="12" />
+            <CheckBox
+                Margin="0,10,0,0"
+                Content="Include Auto Completed JUN"
+                FontSize="12" />
+            <CheckBox
+                Margin="0,10,0,0"
+                Content="Display Available Work"
+                FontSize="12" />
         </StackPanel>
-        <ui:Button x:Name="GetWorkButton3" Command="{Binding ViewModel.GetCompletedUserEventsCommand, Mode=OneWay}" 
-                   Content="Get Work"
-                   Appearance="Primary"
-                   ToolTipService.ToolTip="Gets new work" Margin="0,5,0,0" Grid.Row="2"
-                   Grid.Column="0" Width="200" Grid.RowSpan="2" VerticalAlignment="Bottom" />
-
+        <ui:Button
+            x:Name="GetWorkButton3"
+            Grid.Row="1"
+            Grid.RowSpan="1"
+            Grid.Column="0"
+            Margin="0,60,0,0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Bottom"
+            Appearance="Primary"
+            Command="{Binding ViewModel.GetCompletedUserEventsCommand, Mode=OneWay}"
+            Content="Get Work"
+            ToolTipService.ToolTip="Gets new work" />
     </Grid>
 </ui:UiPage>
