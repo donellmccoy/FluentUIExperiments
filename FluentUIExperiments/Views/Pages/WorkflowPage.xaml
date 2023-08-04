@@ -29,7 +29,7 @@
             Grid.Column="0"
             Grid.ColumnSpan="1"
             IsEnabled="{Binding ViewModel.IsBusy, Converter={StaticResource BooleanToReverseConverter}}">
-            <StackPanel Orientation="Vertical" Margin="0,20,0,0">
+            <StackPanel Margin="0,20,0,0" Orientation="Vertical">
                 <Label Content="County" Target="{Binding ElementName=CountyComboBox}" />
                 <ComboBox
                     x:Name="CountyComboBox"
@@ -123,5 +123,45 @@
             Command="{Binding ViewModel.GetCompletedUserEventsCommand, Mode=OneWay}"
             Content="Get Work"
             ToolTipService.ToolTip="Gets new work" />
+        <StackPanel
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Grid.Column="1"
+            Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <ui:Button
+                    Margin="10,8,0,0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Bottom"
+                    Appearance="Primary"
+                    Command="{Binding ViewModel.GetCompletedUserEventsCommand, Mode=OneWay}"
+                    Content="Get Work"
+                    ToolTipService.ToolTip="Gets new work" />
+            </StackPanel>
+            <TabControl Margin="10,8,10,0">
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Margin="0,0,6,0" Symbol="XboxConsole24" />
+                            <TextBlock Text="Hello" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid>
+                        <TextBlock Margin="12" Text="World" />
+                    </Grid>
+                </TabItem>
+                <TabItem IsSelected="True">
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Margin="0,0,6,0" Symbol="StoreMicrosoft16" />
+                            <TextBlock Text="The cake" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid>
+                        <TextBlock Margin="12" Text="Is a lie." />
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </StackPanel>
     </Grid>
 </ui:UiPage>
