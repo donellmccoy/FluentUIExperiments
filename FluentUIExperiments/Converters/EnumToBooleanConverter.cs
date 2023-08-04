@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace FluentUIExperiments.Helpers;
+namespace FluentUIExperiments.Converters;
 internal class EnumToBooleanConverter : IValueConverter
 {
     public EnumToBooleanConverter()

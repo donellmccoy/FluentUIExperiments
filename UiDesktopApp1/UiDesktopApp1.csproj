@@ -3,8 +3,8 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
-    <Nullable>disable</Nullable>
-    <LangVersion>11.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <LangVersion>10.0</LangVersion>
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>applicationIcon.ico</ApplicationIcon>
@@ -17,7 +17,7 @@
   <ItemGroup>
     <PackageReference Include="WPF-UI" Version="2.0.3" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0"/>
   </ItemGroup>
 
   <ItemGroup>

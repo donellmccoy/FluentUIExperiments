@@ -1,17 +1,14 @@
 ﻿using System.Collections.ObjectModel;
-using System.Diagnostics.Metrics;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Wpf.Ui.Common;
+using Wpf.Ui.Common.Interfaces;
 using Wpf.Ui.Controls;
 using Wpf.Ui.Controls.Interfaces;
 using MenuItem = Wpf.Ui.Controls.MenuItem;
 
 namespace FluentUIExperiments.ViewModels;
-public partial class MainWindowViewModel : ObservableObject
+public partial class MainWindowViewModel : ObservableRecipient, INavigationAware
 {
     private bool _isInitialized;
 
@@ -28,50 +25,25 @@ public partial class MainWindowViewModel : ObservableObject
     private ObservableCollection<MenuItem> _trayMenuItems = new();
 
     [ObservableProperty]
-    private ObservableCollection<County> _counties = new();
-
-    [ObservableProperty]
-    private County _selectedCounty;
-
-    [ObservableProperty]
     private bool _isBusy;
 
     [ObservableProperty]
     private bool _inProgress;
 
-
-    [RelayCommand(CanExecute = nameof(CanCompletedUserEvents), AllowConcurrentExecutions = false, FlowExceptionsToTaskScheduler = true)]
-    private async Task GetCompletedUserEventsAsync()
-    {
-        IsBusy = true;
-
-        await Task.Delay(5000);
-
-        IsBusy = false;
-    }
-
-    private static bool CanCompletedUserEvents()
-    {
-        return true;
-    }
-
-
     public MainWindowViewModel()
     {
         if (!_isInitialized)
         {
-            InitializeViewModel();
+            Initialize();
         }
     }
 
-    private void InitializeViewModel()
+    private void Initialize()
     {
-        Counties = new ObservableCollection<County>
+        Messenger.Register<MainWindowViewModel, BusyMessage>(this, (recipient, message) =>
         {
-            new() { CountyId = 1, Name = "Miami/Dade" },
-            new() { CountyId = 2, Name = "Orange" },
-            new() { CountyId = 3, Name = "Brevard" },
-        };
+            recipient.IsBusy = message.Value;
+        });
 
         ApplicationTitle = "Data Center Workflow";
 
@@ -82,7 +54,7 @@ public partial class MainWindowViewModel : ObservableObject
                 Content = "Workflow",
                 PageTag = "dashboard",
                 Icon = SymbolRegular.DesktopFlow20,
-                PageType = typeof(Views.Pages.DashboardPage)
+                PageType = typeof(Views.Pages.WorkflowPage)
             },
             new NavigationItem
             {
@@ -115,19 +87,23 @@ public partial class MainWindowViewModel : ObservableObject
 
         _isInitialized = true;
     }
-}
 
-public class County
-{
-    public int CountyId
+    protected override void OnActivated()
     {
-        get;
-        set;
     }
 
-    public string Name
+    protected override void OnDeactivated()
     {
-        get;
-        set;
+    }
+
+
+    public void OnNavigatedTo()
+    {
+        IsActive = true;
+    }
+
+    public void OnNavigatedFrom()
+    {
+        IsActive = false;
     }
 }

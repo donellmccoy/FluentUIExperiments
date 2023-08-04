@@ -1,12 +1,12 @@
 ﻿<ui:UiPage
-    x:Class="FluentUIExperiments.Views.Pages.SettingsPage"
+    x:Class="UiDesktopApp1.Views.Pages.SettingsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:FluentUIExperiments.Views.Pages"
+    xmlns:helpers="clr-namespace:UiDesktopApp1.Helpers"
+    xmlns:local="clr-namespace:UiDesktopApp1.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-    xmlns:converters="clr-namespace:FluentUIExperiments.Converters"
     Title="SettingsPage"
     d:DataContext="{d:DesignInstance local:SettingsPage,
                                      IsDesignTimeCreatable=False}"
@@ -16,10 +16,10 @@
     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     mc:Ignorable="d">
     <ui:UiPage.Resources>
-        <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+        <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
     </ui:UiPage.Resources>
 
-    <StackPanel>
+    <StackPanel Margin="56,0">
         <TextBlock
             FontSize="20"
             FontWeight="Medium"
@@ -44,7 +44,7 @@
             Margin="0,24,0,0"
             FontSize="20"
             FontWeight="Medium"
-            Text="About FluentUIExperiments" />
+            Text="About UiDesktopApp1" />
         <TextBlock Margin="0,12,0,0" Text="{Binding ViewModel.AppVersion, Mode=OneWay}" />
     </StackPanel>
 </ui:UiPage>

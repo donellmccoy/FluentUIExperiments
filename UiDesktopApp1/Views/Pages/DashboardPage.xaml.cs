@@ -1,6 +1,6 @@
 ﻿using Wpf.Ui.Common.Interfaces;
 
-namespace FluentUIExperiments.Views.Pages;
+namespace UiDesktopApp1.Views.Pages;
 /// <summary>
 /// Interaction logic for DashboardPage.xaml
 /// </summary>

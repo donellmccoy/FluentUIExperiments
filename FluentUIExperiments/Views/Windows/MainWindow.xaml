@@ -81,15 +81,15 @@
                     </Grid.RowDefinitions>
                     <Frame
                         x:Name="RootFrame"
-                        Grid.Row="1"
+                        Grid.Row="0"
                         Margin="0" />
-                    <ui:Breadcrumb
+                    <!--<ui:Breadcrumb
                         Grid.Row="0"
                         Margin="0,0,0,12"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         FontSize="24"
-                        Navigation="{Binding ElementName=RootNavigation, Mode=OneWay}" />
+                        Navigation="{Binding ElementName=RootNavigation, Mode=OneWay}" />-->
                 </Grid>
             </Border>
         </Grid>

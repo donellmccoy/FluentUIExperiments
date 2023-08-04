@@ -3,13 +3,19 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using FluentUIExperiments.Models;
 using Wpf.Ui.Common.Interfaces;
-using Wpf.Ui.Mvvm.Interfaces;
 
 namespace FluentUIExperiments.ViewModels;
-public partial class DashboardViewModel : ObservableRecipient, INavigationAware
+public partial class WorkflowViewModel : ObservableRecipient, INavigationAware
 {
     #region Fields
+
+    [ObservableProperty]
+    private bool _isBusy;
+
+    [ObservableProperty]
+    private bool _inProgress;
 
     [ObservableProperty]
     private ObservableCollection<County> _counties = new();
@@ -18,10 +24,22 @@ public partial class DashboardViewModel : ObservableRecipient, INavigationAware
     private County _selectedCounty;
 
     [ObservableProperty]
-    private bool _isBusy;
+    private ObservableCollection<TypeOfWork> _typesOfWork = new();
 
     [ObservableProperty]
-    private bool _inProgress;
+    private TypeOfWork _selectedTypeOfWork;
+
+    [ObservableProperty]
+    private ObservableCollection<TypeOfInstrument> _typesOfInstruments = new();
+
+    [ObservableProperty]
+    private TypeOfInstrument _selectedTypeOfInstrument;
+
+    [ObservableProperty]
+    private ObservableCollection<TypeOfCountBy> _typesOfCountBy = new();
+
+    [ObservableProperty]
+    private TypeOfCountBy _selectedTypeOfCountBy;
 
     [ObservableProperty]
     private bool _includeMcnWithCriminalAndSuspect;
@@ -42,13 +60,20 @@ public partial class DashboardViewModel : ObservableRecipient, INavigationAware
 
     #region Constructors
 
-    public DashboardViewModel()
+    public WorkflowViewModel()
     {
         Counties = new ObservableCollection<County>
         {
             new() { CountyId = 1, Name = "Miami/Dade" },
             new() { CountyId = 2, Name = "Orange" },
             new() { CountyId = 3, Name = "Brevard" },
+        };
+
+        TypesOfInstruments = new ObservableCollection<TypeOfInstrument>
+        {
+            new() { TypeOfInstrumentId = 1, Name = "TypeOfInstrument 1" },
+            new() { TypeOfInstrumentId = 2, Name = "TypeOfInstrument 2" },
+            new() { TypeOfInstrumentId = 3, Name = "TypeOfInstrument 3" },
         };
     }
 
@@ -59,16 +84,21 @@ public partial class DashboardViewModel : ObservableRecipient, INavigationAware
     [RelayCommand(CanExecute = nameof(CanCompletedUserEvents), AllowConcurrentExecutions = false, FlowExceptionsToTaskScheduler = true)]
     private async Task GetCompletedUserEventsAsync()
     {
-        IsBusy = true;
+        ShowHideProgressBar(true);
 
-        await Task.Delay(5000);
+        await Task.Delay(2000);
 
-        IsBusy = false;
+        ShowHideProgressBar(false);
     }
 
     private static bool CanCompletedUserEvents()
     {
         return true;
+    }
+
+    private void ShowHideProgressBar(bool isShowing)
+    {
+        Messenger.Send(new BusyMessage(isShowing));
     }
 
     #endregion
@@ -77,10 +107,10 @@ public partial class DashboardViewModel : ObservableRecipient, INavigationAware
 
     protected override void OnActivated()
     {
-        Messenger.Register<DashboardViewModel, MyMessage>(this, MyMessageHandler);
+        Messenger.Register<WorkflowViewModel, MyMessage>(this, MyMessageHandler);
     }
 
-    private static void MyMessageHandler(DashboardViewModel viewModel, MyMessage message)
+    private static void MyMessageHandler(WorkflowViewModel viewModel, MyMessage message)
     {
         viewModel.ReceivedValue = message.Value;
     }

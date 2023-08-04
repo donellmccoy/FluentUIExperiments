@@ -8,3 +8,10 @@ public class MyMessage : ValueChangedMessage<int>
     {
     }
 }
+
+public class BusyMessage : ValueChangedMessage<bool>
+{
+    public BusyMessage(bool isBusy) : base(isBusy)
+    {
+    }
+}

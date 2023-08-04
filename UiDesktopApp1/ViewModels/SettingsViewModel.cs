@@ -1,16 +1,16 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
 using Wpf.Ui.Common.Interfaces;
 
-namespace FluentUIExperiments.ViewModels;
-
-public partial class SettingsViewModel : ObservableRecipient, INavigationAware
+namespace UiDesktopApp1.ViewModels;
+public partial class SettingsViewModel : ObservableObject, INavigationAware
 {
-    private bool _isInitialized;
+    private bool _isInitialized = false;
 
     [ObservableProperty]
-    private string _appVersion = string.Empty;
+    private string _appVersion = String.Empty;
 
     [ObservableProperty]
     private Wpf.Ui.Appearance.ThemeType _currentTheme = Wpf.Ui.Appearance.ThemeType.Unknown;
@@ -18,9 +18,7 @@ public partial class SettingsViewModel : ObservableRecipient, INavigationAware
     public void OnNavigatedTo()
     {
         if (!_isInitialized)
-        {
             InitializeViewModel();
-        }
     }
 
     public void OnNavigatedFrom()
@@ -30,14 +28,14 @@ public partial class SettingsViewModel : ObservableRecipient, INavigationAware
     private void InitializeViewModel()
     {
         CurrentTheme = Wpf.Ui.Appearance.Theme.GetAppTheme();
-        AppVersion = $"FluentUIExperiments - {GetAssemblyVersion()}";
+        AppVersion = $"UiDesktopApp1 - {GetAssemblyVersion()}";
 
         _isInitialized = true;
     }
 
-    private static string GetAssemblyVersion()
+    private string GetAssemblyVersion()
     {
-        return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? string.Empty;
+        return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? String.Empty;
     }
 
     [RelayCommand]
@@ -46,11 +44,8 @@ public partial class SettingsViewModel : ObservableRecipient, INavigationAware
         switch (parameter)
         {
             case "theme_light":
-
                 if (CurrentTheme == Wpf.Ui.Appearance.ThemeType.Light)
-                {
                     break;
-                }
 
                 Wpf.Ui.Appearance.Theme.Apply(Wpf.Ui.Appearance.ThemeType.Light);
                 CurrentTheme = Wpf.Ui.Appearance.ThemeType.Light;
@@ -58,14 +53,12 @@ public partial class SettingsViewModel : ObservableRecipient, INavigationAware
                 break;
 
             default:
-
                 if (CurrentTheme == Wpf.Ui.Appearance.ThemeType.Dark)
-                {
                     break;
-                }
 
                 Wpf.Ui.Appearance.Theme.Apply(Wpf.Ui.Appearance.ThemeType.Dark);
                 CurrentTheme = Wpf.Ui.Appearance.ThemeType.Dark;
+
                 break;
         }
     }
