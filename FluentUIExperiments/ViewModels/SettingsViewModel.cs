@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
 using Wpf.Ui.Common.Interfaces;
 
 namespace FluentUIExperiments.ViewModels;
@@ -66,6 +65,7 @@ public partial class SettingsViewModel : ObservableRecipient, INavigationAware
 
                 Wpf.Ui.Appearance.Theme.Apply(Wpf.Ui.Appearance.ThemeType.Dark);
                 CurrentTheme = Wpf.Ui.Appearance.ThemeType.Dark;
+
                 break;
         }
     }

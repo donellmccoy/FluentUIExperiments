@@ -2,17 +2,17 @@
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
 using FluentUIExperiments.Models;
 using Wpf.Ui.Common.Interfaces;
 
 namespace FluentUIExperiments.ViewModels;
-public partial class WorkflowViewModel : ObservableRecipient, INavigationAware
+
+public partial class WorkflowViewModel : DcwViewModelBase, INavigationAware
 {
     #region Fields
 
     [ObservableProperty]
-    private bool _isBusy;
+    private bool _isEnabled = true;
 
     [ObservableProperty]
     private bool _inProgress;
@@ -33,6 +33,9 @@ public partial class WorkflowViewModel : ObservableRecipient, INavigationAware
     private ObservableCollection<TypeOfInstrument> _typesOfInstruments = new();
 
     [ObservableProperty]
+    private ObservableCollection<int> _numberOfUnits = new(){ 1, 10, 50, 100};
+
+    [ObservableProperty]
     private TypeOfInstrument _selectedTypeOfInstrument;
 
     [ObservableProperty]
@@ -40,6 +43,9 @@ public partial class WorkflowViewModel : ObservableRecipient, INavigationAware
 
     [ObservableProperty]
     private TypeOfCountBy _selectedTypeOfCountBy;
+
+    [ObservableProperty]
+    private int _selectedNumberOfUnits;
 
     [ObservableProperty]
     private bool _includeMcnWithCriminalAndSuspect;
@@ -84,11 +90,13 @@ public partial class WorkflowViewModel : ObservableRecipient, INavigationAware
     [RelayCommand(CanExecute = nameof(CanCompletedUserEvents), AllowConcurrentExecutions = false, FlowExceptionsToTaskScheduler = true)]
     private async Task GetCompletedUserEventsAsync()
     {
-        ShowHideProgressBar(true);
+        EnableSearchControls(false);
+        SendBusyMessage(true);
 
         await Task.Delay(2000);
 
-        ShowHideProgressBar(false);
+        SendBusyMessage(false);
+        EnableSearchControls(true);
     }
 
     private static bool CanCompletedUserEvents()
@@ -96,9 +104,9 @@ public partial class WorkflowViewModel : ObservableRecipient, INavigationAware
         return true;
     }
 
-    private void ShowHideProgressBar(bool isShowing)
+    private void EnableSearchControls(bool isEnabled)
     {
-        Messenger.Send(new BusyMessage(isShowing));
+        IsEnabled = isEnabled;
     }
 
     #endregion
@@ -107,17 +115,10 @@ public partial class WorkflowViewModel : ObservableRecipient, INavigationAware
 
     protected override void OnActivated()
     {
-        Messenger.Register<WorkflowViewModel, MyMessage>(this, MyMessageHandler);
-    }
-
-    private static void MyMessageHandler(WorkflowViewModel viewModel, MyMessage message)
-    {
-        viewModel.ReceivedValue = message.Value;
     }
 
     protected override void OnDeactivated()
     {
-        Messenger.Unregister<MyMessage>(this);
     }
 
     public void OnNavigatedTo()

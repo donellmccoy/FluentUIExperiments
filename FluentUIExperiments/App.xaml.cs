@@ -21,15 +21,20 @@ public partial class App
     // https://docs.microsoft.com/dotnet/core/extensions/logging
     private static readonly IHost Host = Microsoft.Extensions.Hosting.Host
         .CreateDefaultBuilder()
-        .ConfigureAppConfiguration(c => { c.SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)); })
+        .ConfigureAppConfiguration(builder =>
+        {
+            builder.SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location));
+        })
         .ConfigureServices((context, services) =>
         {
             services.AddHostedService<ApplicationHostService>();
+
             services.AddSingleton<IPageService, PageService>();
             services.AddSingleton<IThemeService, ThemeService>();
             services.AddSingleton<ITaskBarService, TaskBarService>();
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<ISnackbarService, SnackbarService>();
+
             services.AddScoped<INavigationWindow, Views.Windows.MainWindow>();
             services.AddScoped<ViewModels.MainWindowViewModel>();
             services.AddScoped<Views.Pages.WorkflowPage>();
@@ -40,6 +45,7 @@ public partial class App
             services.AddScoped<ViewModels.SettingsViewModel>();
 
             services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));
+
         }).Build();
 
     /// <summary>
