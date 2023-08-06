@@ -107,19 +107,19 @@
                     ItemsSource="{Binding ViewModel.TypesOfCountBy}"
                     SelectedItem="{Binding ViewModel.SelectedTypeOfCountBy}"
                     SelectedValuePath="TypeOfCountById" />
-                <CheckBox
+                <ui:ToggleSwitch
                     Margin="0,10,0,0"
                     Content="Include MCN with criminal and suspect"
                     IsChecked="{Binding ViewModel.IncludeMcnWithCriminalAndSuspect}" />
-                <CheckBox
+                <ui:ToggleSwitch
                     Margin="0,10,0,0"
                     Content="Include auto-completed criminal and suspect"
                     IsChecked="{Binding ViewModel.IncludeAutoCompletedCriminalAndSuspect}" />
-                <CheckBox
+                <ui:ToggleSwitch
                     Margin="0,10,0,0"
                     Content="Include auto-completed junk documents"
                     IsChecked="{Binding ViewModel.IncludeAutoCompletedJunkDocuments}" />
-                <CheckBox
+                <ui:ToggleSwitch
                     Margin="0,10,0,0"
                     Content="Display available work"
                     IsChecked="{Binding ViewModel.DisplayAvailableWork}" />
@@ -136,6 +136,7 @@
             Appearance="Primary"
             Command="{Binding ViewModel.GetCompletedUserEventsCommand, Mode=OneWay}"
             Content="Get Work"
+            Icon="Fluent24"
             ToolTipService.ToolTip="Gets new work" />
         <StackPanel
             Grid.Row="0"

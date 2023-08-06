@@ -14,11 +14,6 @@ namespace FluentUIExperiments;
 
 public partial class App
 {
-    // The.NET Generic Host provides dependency injection, configuration, logging, and other services.
-    // https://docs.microsoft.com/dotnet/core/extensions/generic-host
-    // https://docs.microsoft.com/dotnet/core/extensions/dependency-injection
-    // https://docs.microsoft.com/dotnet/core/extensions/configuration
-    // https://docs.microsoft.com/dotnet/core/extensions/logging
     private static readonly IHost Host = Microsoft.Extensions.Hosting.Host
         .CreateDefaultBuilder()
         .ConfigureAppConfiguration(builder =>
@@ -47,17 +42,6 @@ public partial class App
             services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));
 
         }).Build();
-
-    /// <summary>
-    /// Gets registered service.
-    /// </summary>
-    /// <typeparam name="T">Type of the service to get.</typeparam>
-    /// <returns>Instance of the service or <see langword="null"/>.</returns>
-    public static T GetService<T>()
-        where T : class
-    {
-        return Host.Services.GetService(typeof(T)) as T;
-    }
 
     /// <summary>
     /// Occurs when the application is loading.

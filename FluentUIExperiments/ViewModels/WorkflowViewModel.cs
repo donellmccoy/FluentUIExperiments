@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentUIExperiments.Models;
@@ -84,6 +85,8 @@ public partial class WorkflowViewModel : DcwViewModelBase, INavigationAware
     }
 
     #endregion
+
+    public ObservableGroupedCollection<string, County> Contacts { get; private set; } = new();
 
     #region Commands
 
