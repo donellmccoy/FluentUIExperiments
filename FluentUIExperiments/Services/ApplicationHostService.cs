@@ -3,10 +3,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Wpf.Ui.Mvvm.Contracts;
 
 namespace FluentUIExperiments.Services;
+
 /// <summary>
 /// Managed host of the application.
 /// </summary>
@@ -45,9 +47,10 @@ public class ApplicationHostService : IHostedService
     {
         await Task.CompletedTask;
 
-        if (!Application.Current.Windows.OfType<Views.Windows.MainWindow>().Any())
+        if (Application.Current.Windows.OfType<Views.Windows.MainWindow>().Any() is false)
         {
             _navigationWindow = (_serviceProvider.GetService(typeof(INavigationWindow)) as INavigationWindow)!;
+
             _navigationWindow!.ShowWindow();
 
             _navigationWindow.Navigate(typeof(Views.Pages.WorkflowPage));

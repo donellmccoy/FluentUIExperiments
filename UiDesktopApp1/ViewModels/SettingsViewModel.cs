@@ -7,7 +7,7 @@ using Wpf.Ui.Common.Interfaces;
 namespace UiDesktopApp1.ViewModels;
 public partial class SettingsViewModel : ObservableObject, INavigationAware
 {
-    private bool _isInitialized = false;
+    private bool _isInitialized;
 
     [ObservableProperty]
     private string _appVersion = String.Empty;

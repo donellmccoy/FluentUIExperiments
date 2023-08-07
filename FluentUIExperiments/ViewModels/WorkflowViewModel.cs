@@ -1,16 +1,25 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentUIExperiments.Models;
+using FluentUIExperiments.Services;
 using Wpf.Ui.Common.Interfaces;
 
 namespace FluentUIExperiments.ViewModels;
 
 public partial class WorkflowViewModel : DcwViewModelBase, INavigationAware
 {
+
     #region Fields
+
+    private bool _isInitialized;
+
+    private readonly IDataService _dataService;
 
     [ObservableProperty]
     private bool _isEnabled = true;
@@ -19,28 +28,30 @@ public partial class WorkflowViewModel : DcwViewModelBase, INavigationAware
     private bool _inProgress;
 
     [ObservableProperty]
-    private ObservableCollection<County> _counties = new();
+    private IEnumerable<int> _numberOfUnits = new[] { 1, 10, 50, 100 };
+
+    [ObservableProperty]
+    private IEnumerable<County> _counties = Enumerable.Empty<County>();
 
     [ObservableProperty]
     private County _selectedCounty;
 
     [ObservableProperty]
-    private ObservableCollection<TypeOfWork> _typesOfWork = new();
+    private IEnumerable<TypeOfWork> _typesOfWork = Enumerable.Empty<TypeOfWork>();
 
     [ObservableProperty]
     private TypeOfWork _selectedTypeOfWork;
 
     [ObservableProperty]
-    private ObservableCollection<TypeOfInstrument> _typesOfInstruments = new();
-
-    [ObservableProperty]
-    private ObservableCollection<int> _numberOfUnits = new(){ 1, 10, 50, 100};
+    private IEnumerable<TypeOfInstrument> _typesOfInstruments = Enumerable.Empty<TypeOfInstrument>();
 
     [ObservableProperty]
     private TypeOfInstrument _selectedTypeOfInstrument;
 
     [ObservableProperty]
-    private ObservableCollection<TypeOfCountBy> _typesOfCountBy = new();
+    private IEnumerable<TypeOfCountBy> _typesOfCountBy = Enumerable.Empty<TypeOfCountBy>();
+
+
 
     [ObservableProperty]
     private TypeOfCountBy _selectedTypeOfCountBy;
@@ -58,7 +69,7 @@ public partial class WorkflowViewModel : DcwViewModelBase, INavigationAware
     private bool _includeAutoCompletedJunkDocuments;
 
     [ObservableProperty]
-    private bool _displayAvailableWork;
+    private bool _includeAvailableWork;
 
     [ObservableProperty]
     private int _receivedValue;
@@ -67,21 +78,9 @@ public partial class WorkflowViewModel : DcwViewModelBase, INavigationAware
 
     #region Constructors
 
-    public WorkflowViewModel()
+    public WorkflowViewModel(IDataService dataService)
     {
-        Counties = new ObservableCollection<County>
-        {
-            new() { CountyId = 1, Name = "Miami/Dade" },
-            new() { CountyId = 2, Name = "Orange" },
-            new() { CountyId = 3, Name = "Brevard" },
-        };
-
-        TypesOfInstruments = new ObservableCollection<TypeOfInstrument>
-        {
-            new() { TypeOfInstrumentId = 1, Name = "TypeOfInstrument 1" },
-            new() { TypeOfInstrumentId = 2, Name = "TypeOfInstrument 2" },
-            new() { TypeOfInstrumentId = 3, Name = "TypeOfInstrument 3" },
-        };
+        _dataService = dataService;
     }
 
     #endregion
@@ -116,12 +115,42 @@ public partial class WorkflowViewModel : DcwViewModelBase, INavigationAware
 
     #region Methods
 
-    protected override void OnActivated()
+    protected async override void OnActivated()
     {
+        if (_isInitialized is false)
+        {
+            try
+            {
+                EnableSearchControls(false);
+                SendBusyMessage(true);
+
+                await InitializeAsync();
+            }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                SendBusyMessage(false);
+                EnableSearchControls(true);
+            }
+        }
+    }
+
+    private async Task InitializeAsync()
+    {
+        Counties = await _dataService.GetCounties();
+        TypesOfInstruments = await _dataService.GetTypesOfInstruments();
+        TypesOfWork = await _dataService.GetTypesOfWork();
+        TypesOfCountBy = await _dataService.GetTypesOfCountBy();
+
+        _isInitialized = true;
     }
 
     protected override void OnDeactivated()
     {
+
     }
 
     public void OnNavigatedTo()

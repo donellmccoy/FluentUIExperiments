@@ -8,15 +8,17 @@ using Wpf.Ui.Common.Interfaces;
 namespace UiDesktopApp1.ViewModels;
 public partial class DataViewModel : ObservableObject, INavigationAware
 {
-    private bool _isInitialized = false;
+    private bool _isInitialized;
 
     [ObservableProperty]
-    private IEnumerable<DataColor> _colors;
+    private IEnumerable<DataColor>? _colors;
 
     public void OnNavigatedTo()
     {
         if (!_isInitialized)
+        {
             InitializeViewModel();
+        }
     }
 
     public void OnNavigatedFrom()
@@ -28,7 +30,8 @@ public partial class DataViewModel : ObservableObject, INavigationAware
         var random = new Random();
         var colorCollection = new List<DataColor>();
 
-        for (int i = 0; i < 8192; i++)
+        for (var i = 0; i < 8192; i++)
+        {
             colorCollection.Add(new DataColor
             {
                 Color = new SolidColorBrush(Color.FromArgb(
@@ -37,6 +40,7 @@ public partial class DataViewModel : ObservableObject, INavigationAware
                     (byte)random.Next(0, 250),
                     (byte)random.Next(0, 250)))
             });
+        }
 
         Colors = colorCollection;
 

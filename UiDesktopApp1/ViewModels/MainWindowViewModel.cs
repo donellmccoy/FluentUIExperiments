@@ -9,7 +9,7 @@ using Wpf.Ui.Mvvm.Contracts;
 namespace UiDesktopApp1.ViewModels;
 public partial class MainWindowViewModel : ObservableObject
 {
-    private bool _isInitialized = false;
+    private bool _isInitialized;
 
     [ObservableProperty]
     private string _applicationTitle = String.Empty;

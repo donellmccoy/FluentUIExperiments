@@ -18,7 +18,7 @@ public partial class App
         .CreateDefaultBuilder()
         .ConfigureAppConfiguration(builder =>
         {
-            builder.SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location));
+            builder.SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!);
         })
         .ConfigureServices((context, services) =>
         {
@@ -29,6 +29,8 @@ public partial class App
             services.AddSingleton<ITaskBarService, TaskBarService>();
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<ISnackbarService, SnackbarService>();
+
+            services.AddSingleton<IDataService, DataService>();
 
             services.AddScoped<INavigationWindow, Views.Windows.MainWindow>();
             services.AddScoped<ViewModels.MainWindowViewModel>();
