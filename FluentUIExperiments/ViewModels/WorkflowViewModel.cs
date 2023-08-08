@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FluentUIExperiments.Enumerations;
 using FluentUIExperiments.Models;
 using FluentUIExperiments.Services;
 using Wpf.Ui.Common.Interfaces;
 
 namespace FluentUIExperiments.ViewModels;
 
-public partial class WorkflowViewModel : DcwViewModelBase, INavigationAware
+public partial class WorkflowViewModel : ViewModelBase, INavigationAware
 {
 
     #region Fields
@@ -93,11 +94,11 @@ public partial class WorkflowViewModel : DcwViewModelBase, INavigationAware
     private async Task GetCompletedUserEventsAsync()
     {
         EnableSearchControls(false);
-        SendBusyMessage(true);
+        SendBusyMessage(BusyType.Busy);
 
         await Task.Delay(2000);
 
-        SendBusyMessage(false);
+        SendBusyMessage(BusyType.NoBusy);
         EnableSearchControls(true);
     }
 
@@ -117,24 +118,26 @@ public partial class WorkflowViewModel : DcwViewModelBase, INavigationAware
 
     protected async override void OnActivated()
     {
-        if (_isInitialized is false)
+        if (_isInitialized)
         {
-            try
-            {
-                EnableSearchControls(false);
-                SendBusyMessage(true);
+            return;
+        }
 
-                await InitializeAsync();
-            }
-            catch (Exception ex)
-            {
+        try
+        {
+            EnableSearchControls(false);
+            SendBusyMessage(BusyType.Busy);
 
-            }
-            finally
-            {
-                SendBusyMessage(false);
-                EnableSearchControls(true);
-            }
+            await InitializeAsync();
+        }
+        catch (Exception ex)
+        {
+            // show message; failed to initialize
+        }
+        finally
+        {
+            SendBusyMessage(BusyType.NoBusy);
+            EnableSearchControls(true);
         }
     }
 

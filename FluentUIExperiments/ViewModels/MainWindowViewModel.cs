@@ -33,10 +33,12 @@ public partial class MainWindowViewModel : ObservableRecipient, INavigationAware
 
     public MainWindowViewModel()
     {
-        if (!_isInitialized)
+        if (_isInitialized)
         {
-            Initialize();
+            return;
         }
+
+        Initialize();
     }
 
     private void Initialize()

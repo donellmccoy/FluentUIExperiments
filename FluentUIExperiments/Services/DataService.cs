@@ -45,9 +45,7 @@ public class DataService : IDataService
 
     public async Task<IEnumerable<TypeOfCountBy>> GetTypesOfCountBy()
     {
-        await Task.Delay(5000);
-
-        throw new Exception("Test exception");
+        await Task.CompletedTask;
 
         return new List<TypeOfCountBy>
         {
