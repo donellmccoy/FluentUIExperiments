@@ -1,10 +1,8 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Navigation;
 using System.Windows.Threading;
-using FluentUIExperiments.Models;
 using FluentUIExperiments.Options;
 using FluentUIExperiments.Services;
 using FluentUIExperiments.Services.Interfaces;
@@ -21,14 +19,15 @@ public partial class App
 {
     private static readonly IHost Host = Microsoft.Extensions.Hosting.Host
         .CreateDefaultBuilder()
-        .ConfigureAppConfiguration(builder => builder.SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!))
+        .ConfigureAppConfiguration(builder =>
+        {
+            builder.SetBasePath(Directory.GetCurrentDirectory());
+            builder.AddJsonFile("appsettings.json", false, true);
+        })
         .ConfigureServices((context, services) =>
         {
-            services.AddOptions<AppSettings>();
             services.AddHostedService<ApplicationHostService>();
-
             services.AddMemoryCache();
-
             services.AddSingleton<IPageService, PageService>();
             services.AddSingleton<IThemeService, ThemeService>();
             services.AddSingleton<ITaskBarService, TaskBarService>();
@@ -36,9 +35,7 @@ public partial class App
             services.AddSingleton<ISnackbarService, SnackbarService>();
             services.AddSingleton<ICacheService, CacheService>();
             services.AddSingleton<IDataService, DataService>();
-
             services.AddScoped<INavigationWindow, Views.Windows.MainWindow>();
-
             services.AddScoped<ViewModels.MainWindowViewModel>();
             services.AddScoped<Views.Pages.WorkflowPage>();
             services.AddScoped<ViewModels.WorkflowViewModel>();
@@ -47,19 +44,9 @@ public partial class App
             services.AddScoped<Views.Pages.SettingsPage>();
             services.AddScoped<ViewModels.SettingsViewModel>();
 
-            services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));
+            services.Configure<AppSettings>(context.Configuration);
 
         }).Build();
-
-    protected override void OnActivated(EventArgs e)
-    {
-        base.OnActivated(e);
-    }
-
-    protected override void OnLoadCompleted(NavigationEventArgs e)
-    {
-        base.OnLoadCompleted(e);
-    }
 
     /// <summary>
     /// Occurs when the application is loading.
@@ -67,6 +54,7 @@ public partial class App
     private async void OnStartup(object sender, StartupEventArgs e)
     {
         await Host.StartAsync();
+        await Host.Services.GetService<ICacheService>().LoadCacheAsync();
     }
 
     /// <summary>

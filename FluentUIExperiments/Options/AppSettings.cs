@@ -2,13 +2,15 @@
 
 public class AppSettings
 {
-    public AppSettings()
+    public DatabaseOptions DatabaseOptions
     {
-        AllowedRetries = 3;
+        get;
+        set;
     }
 
-    public int AllowedRetries
+    public CacheOptions CacheOptions
     {
-        get; set;
+        get;
+        set;
     }
 }

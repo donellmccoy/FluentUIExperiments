@@ -7,8 +7,9 @@ namespace FluentUIExperiments.Services.Interfaces;
 
 public interface ICacheService
 {
-    Task<IEnumerable<County>> GetCounties(CancellationToken token = default);
-    Task<IEnumerable<TypeOfInstrument>> GetTypesOfInstruments(CancellationToken token = default);
-    Task<IEnumerable<TypeOfWork>> GetTypesOfWork(CancellationToken token = default);
-    Task<IEnumerable<TypeOfCountBy>> GetTypesOfCountBy(CancellationToken token = default);
+    Task<IEnumerable<County>> GetCountiesAsync(CancellationToken token = default);
+    Task<IEnumerable<TypeOfInstrument>> GetTypesOfInstrumentsAsync(CancellationToken token = default);
+    Task<IEnumerable<TypeOfWork>> GetTypesOfWorkAsync(CancellationToken token = default);
+    Task<IEnumerable<TypeOfCountBy>> GetTypesOfCountByAsync(CancellationToken token = default);
+    Task LoadCacheAsync();
 }

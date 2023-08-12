@@ -7,9 +7,11 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentUIExperiments.Enumerations;
 using FluentUIExperiments.Models;
+using FluentUIExperiments.Options;
 using FluentUIExperiments.Services.Interfaces;
 using Meziantou.Framework;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Wpf.Ui.Common.Interfaces;
 
 namespace FluentUIExperiments.ViewModels;
@@ -20,6 +22,7 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
 
     private bool _isInitialized;
 
+    private readonly IOptions<AppSettings> _options;
     private readonly ICacheService _cacheService;
     private readonly ILogger<WorkflowViewModel> _logger;
 
@@ -83,8 +86,9 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
 
     #region Constructors
 
-    public WorkflowViewModel(ICacheService cacheService, ILogger<WorkflowViewModel> logger)
+    public WorkflowViewModel(IOptions<AppSettings> options, ICacheService cacheService, ILogger<WorkflowViewModel> logger)
     {
+        _options = options;
         _cacheService = cacheService;
         _logger = logger;
     }
@@ -113,7 +117,7 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
 
         await Task.Delay(2000);
 
-        SendBusyMessage(BusyType.NoBusy);
+        SendBusyMessage(BusyType.NotBusy);
         EnableControls(true);
     }
 
@@ -149,25 +153,17 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
         }
         finally
         {
-            SendBusyMessage(BusyType.NoBusy);
+            SendBusyMessage(BusyType.NotBusy);
             EnableControls(true);
         }
     }
 
     private async Task InitializeViewModelAsync()
     {
-        var (counties, typeOfInstruments, typeOfWorks, typeOfCountBys) = await TaskEx.WhenAll
-        (
-            _cacheService.GetCounties(),
-            _cacheService.GetTypesOfInstruments(),
-            _cacheService.GetTypesOfWork(),
-            _cacheService.GetTypesOfCountBy()
-        );
-
-        Counties = counties;
-        TypesOfInstruments = typeOfInstruments;
-        TypesOfWork = typeOfWorks;
-        TypesOfCountBy = typeOfCountBys;
+        Counties = await _cacheService.GetCountiesAsync();
+        TypesOfInstruments = await _cacheService.GetTypesOfInstrumentsAsync();
+        TypesOfWork = await _cacheService.GetTypesOfWorkAsync();
+        TypesOfCountBy = await _cacheService.GetTypesOfCountByAsync();
     }
 
     private void EnableControls(bool isEnabled)

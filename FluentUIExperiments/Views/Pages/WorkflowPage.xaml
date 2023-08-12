@@ -160,7 +160,7 @@
                         </StackPanel>
                     </TabItem.Header>
                     <Grid>
-                        <TextBlock Text="World" />
+                        <TextBlock Margin="12" Text="Is a lie." />
                     </Grid>
                 </TabItem>
                 <TabItem IsSelected="True">

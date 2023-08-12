@@ -32,9 +32,9 @@ public class DataService : IDataService
 
     #region Methods
 
-    public async Task<IEnumerable<County>> GetCounties(CancellationToken token = default)
+    public async Task<IEnumerable<County>> GetCountiesAsync(CancellationToken token = default)
     {
-        return await ExecuteTask(() =>
+        return await ExecuteTaskAsync(() =>
         {
             return Task.Run(() => new List<County>
             {
@@ -45,9 +45,9 @@ public class DataService : IDataService
         });
     }
 
-    public async Task<IEnumerable<TypeOfInstrument>> GetTypesOfInstruments(CancellationToken token = default)
+    public async Task<IEnumerable<TypeOfInstrument>> GetTypesOfInstrumentsAsync(CancellationToken token = default)
     {
-        return await ExecuteTask(() =>
+        return await ExecuteTaskAsync(() =>
         {
             return Task.Run(() => new List<TypeOfInstrument>
             {
@@ -58,9 +58,9 @@ public class DataService : IDataService
         });
     }
 
-    public async Task<IEnumerable<TypeOfWork>> GetTypesOfWork(CancellationToken token = default)
+    public async Task<IEnumerable<TypeOfWork>> GetTypesOfWorkAsync(CancellationToken token = default)
     {
-        return await ExecuteTask(() =>
+        return await ExecuteTaskAsync(() =>
         {
             return Task.Run(() => new List<TypeOfWork>
             {
@@ -71,9 +71,9 @@ public class DataService : IDataService
         });
     }
 
-    public async Task<IEnumerable<TypeOfCountBy>> GetTypesOfCountBy(CancellationToken token = default)
+    public async Task<IEnumerable<TypeOfCountBy>> GetTypesOfCountByAsync(CancellationToken token = default)
     {
-        return await ExecuteTask(() =>
+        return await ExecuteTaskAsync(() =>
         {
             return Task.Run(() => new List<TypeOfCountBy>
             {
@@ -84,15 +84,14 @@ public class DataService : IDataService
         });
     }
 
-    private async Task<TEntity> ExecuteTask<TEntity>(Func<Task<TEntity>> action)
+    private async Task<TEntity> ExecuteTaskAsync<TEntity>(Func<Task<TEntity>> action)
     {
-        return await Policy
-            .Handle<AggregateException>()
-            .RetryAsync(_options.Value.AllowedRetries, onRetry: (exception, retryCount, context) =>
-            {
-                _logger.LogError("{retryCount} retry attempt to retrieve types of count by. exception: {exception}", retryCount, exception);
-            })
-            .ExecuteAsync(action);
+        return await Policy.Handle<AggregateException>()
+                           .RetryAsync(_options.Value.DatabaseOptions.AllowedRetries, onRetry: (exception, retryCount, context) =>
+                           {
+                                _logger.LogError("{retryCount} retry attempt to retrieve types of count by. exception: {exception}", retryCount, exception);
+                           })
+                           .ExecuteAsync(action);
     }
 
     #endregion

@@ -3,5 +3,5 @@
 public enum BusyType
 {
     Busy,
-    NoBusy
+    NotBusy
 }
