@@ -7,7 +7,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentUIExperiments.Enumerations;
 using FluentUIExperiments.Models;
-using FluentUIExperiments.Services;
 using FluentUIExperiments.Services.Interfaces;
 using Meziantou.Framework;
 using Microsoft.Extensions.Logging;

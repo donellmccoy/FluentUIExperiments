@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using FluentUIExperiments.Services;
 using FluentUIExperiments.Services.Interfaces;
 using Wpf.Ui.Common.Interfaces;
 
