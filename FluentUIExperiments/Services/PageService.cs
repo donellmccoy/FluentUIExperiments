@@ -3,6 +3,7 @@ using System.Windows;
 using Wpf.Ui.Mvvm.Contracts;
 
 namespace FluentUIExperiments.Services;
+
 /// <summary>
 /// Service that provides pages for navigation.
 /// </summary>
@@ -24,7 +25,7 @@ public class PageService : IPageService
     /// <inheritdoc />
     public T GetPage<T>() where T : class
     {
-        if (!typeof(FrameworkElement).IsAssignableFrom(typeof(T)))
+        if (typeof(FrameworkElement).IsAssignableFrom(typeof(T)) is false)
         {
             throw new InvalidOperationException("The page should be a WPF control.");
         }
@@ -35,7 +36,7 @@ public class PageService : IPageService
     /// <inheritdoc />
     public FrameworkElement GetPage(Type pageType)
     {
-        if (!typeof(FrameworkElement).IsAssignableFrom(pageType))
+        if (typeof(FrameworkElement).IsAssignableFrom(pageType) is false)
         {
             throw new InvalidOperationException("The page should be a WPF control.");
         }

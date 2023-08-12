@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Collections;
@@ -9,21 +8,27 @@ using CommunityToolkit.Mvvm.Input;
 using FluentUIExperiments.Enumerations;
 using FluentUIExperiments.Models;
 using FluentUIExperiments.Services;
+using FluentUIExperiments.Services.Interfaces;
+using Meziantou.Framework;
+using Microsoft.Extensions.Logging;
 using Wpf.Ui.Common.Interfaces;
 
 namespace FluentUIExperiments.ViewModels;
 
 public partial class WorkflowViewModel : ViewModelBase, INavigationAware
 {
-
     #region Fields
 
     private bool _isInitialized;
 
-    private readonly IDataService _dataService;
+    private readonly ICacheService _cacheService;
+    private readonly ILogger<WorkflowViewModel> _logger;
 
     [ObservableProperty]
     private bool _isEnabled = true;
+
+    [ObservableProperty]
+    private bool _isReadOnly;
 
     [ObservableProperty]
     private bool _inProgress;
@@ -52,8 +57,6 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
     [ObservableProperty]
     private IEnumerable<TypeOfCountBy> _typesOfCountBy = Enumerable.Empty<TypeOfCountBy>();
 
-
-
     [ObservableProperty]
     private TypeOfCountBy _selectedTypeOfCountBy;
 
@@ -75,41 +78,49 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
     [ObservableProperty]
     private int _receivedValue;
 
+    private TaskNotifier<int> _requestTask;
+
     #endregion
 
     #region Constructors
 
-    public WorkflowViewModel(IDataService dataService)
+    public WorkflowViewModel(ICacheService cacheService, ILogger<WorkflowViewModel> logger)
     {
-        _dataService = dataService;
+        _cacheService = cacheService;
+        _logger = logger;
     }
 
     #endregion
 
+    #region Properties
+
+    public Task<int> RequestTask
+    {
+        get => _requestTask;
+        set => SetPropertyAndNotifyOnCompletion(ref _requestTask, value);
+    }
+
     public ObservableGroupedCollection<string, County> Contacts { get; private set; } = new();
+
+    #endregion
 
     #region Commands
 
     [RelayCommand(CanExecute = nameof(CanCompletedUserEvents), AllowConcurrentExecutions = false, FlowExceptionsToTaskScheduler = true)]
     private async Task GetCompletedUserEventsAsync()
     {
-        EnableSearchControls(false);
+        EnableControls(false);
         SendBusyMessage(BusyType.Busy);
 
         await Task.Delay(2000);
 
         SendBusyMessage(BusyType.NoBusy);
-        EnableSearchControls(true);
+        EnableControls(true);
     }
 
     private static bool CanCompletedUserEvents()
     {
         return true;
-    }
-
-    private void EnableSearchControls(bool isEnabled)
-    {
-        IsEnabled = isEnabled;
     }
 
     #endregion
@@ -125,30 +136,44 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
 
         try
         {
-            EnableSearchControls(false);
+            EnableControls(false);
             SendBusyMessage(BusyType.Busy);
 
-            await InitializeAsync();
+            await InitializeViewModelAsync();
+
+            _isInitialized = true;
         }
-        catch (Exception ex)
+        catch (AggregateException ex)
         {
-            // show message; failed to initialize
+            _isInitialized = false;
+            _logger.LogError("exception: {exception}", ex);
         }
         finally
         {
             SendBusyMessage(BusyType.NoBusy);
-            EnableSearchControls(true);
+            EnableControls(true);
         }
     }
 
-    private async Task InitializeAsync()
+    private async Task InitializeViewModelAsync()
     {
-        Counties = await _dataService.GetCounties();
-        TypesOfInstruments = await _dataService.GetTypesOfInstruments();
-        TypesOfWork = await _dataService.GetTypesOfWork();
-        TypesOfCountBy = await _dataService.GetTypesOfCountBy();
+        var (counties, typeOfInstruments, typeOfWorks, typeOfCountBys) = await TaskEx.WhenAll
+        (
+            _cacheService.GetCounties(),
+            _cacheService.GetTypesOfInstruments(),
+            _cacheService.GetTypesOfWork(),
+            _cacheService.GetTypesOfCountBy()
+        );
 
-        _isInitialized = true;
+        Counties = counties;
+        TypesOfInstruments = typeOfInstruments;
+        TypesOfWork = typeOfWorks;
+        TypesOfCountBy = typeOfCountBys;
+    }
+
+    private void EnableControls(bool isEnabled)
+    {
+        IsEnabled = isEnabled;
     }
 
     protected override void OnDeactivated()
@@ -158,12 +183,12 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
 
     public void OnNavigatedTo()
     {
-        IsActive = true;
+        Activate(true);
     }
 
     public void OnNavigatedFrom()
     {
-        IsActive = false;
+        Activate(false);
     }
 
     #endregion

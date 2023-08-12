@@ -1,5 +1,4 @@
 ﻿using Wpf.Ui.Common.Interfaces;
-using CommunityToolkit.Mvvm;
 
 namespace FluentUIExperiments.Views.Pages;
 

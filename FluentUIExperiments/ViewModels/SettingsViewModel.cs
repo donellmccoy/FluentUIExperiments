@@ -1,11 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FluentUIExperiments.Services;
+using FluentUIExperiments.Services.Interfaces;
 using Wpf.Ui.Common.Interfaces;
 
 namespace FluentUIExperiments.ViewModels;
 
 public partial class SettingsViewModel : ObservableRecipient, INavigationAware
 {
+    #region Fields
+
+    private readonly ICacheService _cacheService;
     private bool _isInitialized;
 
     [ObservableProperty]
@@ -14,30 +19,18 @@ public partial class SettingsViewModel : ObservableRecipient, INavigationAware
     [ObservableProperty]
     private Wpf.Ui.Appearance.ThemeType _currentTheme = Wpf.Ui.Appearance.ThemeType.Unknown;
 
-    public void OnNavigatedTo()
+    #endregion
+
+    #region Constructors
+
+    public SettingsViewModel(ICacheService cacheService)
     {
-        if (!_isInitialized)
-        {
-            InitializeViewModel();
-        }
+        _cacheService = cacheService;
     }
 
-    public void OnNavigatedFrom()
-    {
-    }
+    #endregion
 
-    private void InitializeViewModel()
-    {
-        CurrentTheme = Wpf.Ui.Appearance.Theme.GetAppTheme();
-        AppVersion = $"FluentUIExperiments - {GetAssemblyVersion()}";
-
-        _isInitialized = true;
-    }
-
-    private static string GetAssemblyVersion()
-    {
-        return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? string.Empty;
-    }
+    #region Commands
 
     [RelayCommand]
     private void OnChangeTheme(string parameter)
@@ -69,4 +62,37 @@ public partial class SettingsViewModel : ObservableRecipient, INavigationAware
                 break;
         }
     }
+
+    #endregion
+
+    #region Methods
+
+    public void OnNavigatedTo()
+    {
+        if (_isInitialized)
+        {
+            return;
+        }
+
+        InitializeViewModel();
+    }
+
+    public void OnNavigatedFrom()
+    {
+    }
+
+    private void InitializeViewModel()
+    {
+        CurrentTheme = Wpf.Ui.Appearance.Theme.GetAppTheme();
+        AppVersion = $"FluentUIExperiments - {GetAssemblyVersion()}";
+
+        _isInitialized = true;
+    }
+
+    private static string GetAssemblyVersion()
+    {
+        return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? string.Empty;
+    }
+
+    #endregion
 }

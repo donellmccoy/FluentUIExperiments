@@ -16,4 +16,9 @@ public abstract class ViewModelBase : ObservableRecipient
     {
         Messenger.Send(BusyMessage.Create(isBusy));
     }
+
+    protected void Activate(bool isActive)
+    {
+        IsActive = isActive;
+    }
 }
