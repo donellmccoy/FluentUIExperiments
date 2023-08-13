@@ -5,6 +5,7 @@ using FluentUIExperiments.Models;
 using FluentUIExperiments.Options;
 using FluentUIExperiments.Services;
 using FluentUIExperiments.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -44,6 +45,16 @@ public partial class App
             services.AddScoped<ViewModels.SettingsViewModel>();
 
             services.Configure<AppSettings>(context.Configuration);
+
+            services.AddDbContextFactory<DataCenterWorkflowContext>(optionsBuilder =>
+            {
+                optionsBuilder.UseLazyLoadingProxies();
+                optionsBuilder.EnableDetailedErrors();
+                optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=DataCenterWorkflow", builder =>
+                {
+                    builder.EnableRetryOnFailure(3);
+                });
+            });
 
         }).Build();
 

@@ -10,5 +10,5 @@ public interface IDataService
     Task<IEnumerable<County>> GetCountiesAsync(CancellationToken token = default);
     Task<IEnumerable<TypeOfInstrument>> GetTypesOfInstrumentsAsync(CancellationToken token = default);
     Task<IEnumerable<TypeOfWork>> GetTypesOfWorkAsync(CancellationToken token = default);
-    Task<IEnumerable<TypeOfCountBy>> GetTypesOfCountByAsync(CancellationToken token = default);
+    Task<IEnumerable<TypeOfCountBy>> GetTypesOfCountBysAsync(CancellationToken token = default);
 }

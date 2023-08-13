@@ -91,7 +91,7 @@ public class CacheService : ICacheService
 
             entry.SetAbsoluteExpiration(_cacheOptions.AbsoluteExpirationRelativeToNow);
 
-            return _dataService.GetTypesOfCountByAsync(token);
+            return _dataService.GetTypesOfCountBysAsync(token);
         });
     }
 

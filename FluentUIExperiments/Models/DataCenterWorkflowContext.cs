@@ -1,10 +1,14 @@
-﻿using System.Windows.Automation.Provider;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace FluentUIExperiments.Models;
 
 public class DataCenterWorkflowContext : DbContext
 {
+    public DataCenterWorkflowContext(DbContextOptions<DataCenterWorkflowContext> options)
+        : base(options)
+    {
+    }
+
     public DbSet<TypeOfWork> TypeOfWorks
     {
         get; set;
@@ -26,11 +30,5 @@ public class DataCenterWorkflowContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=DataCenterWorkflow", builder =>
-        {
-            builder.EnableRetryOnFailure(3);
-        });
-
-        optionsBuilder.UseLazyLoadingProxies();
     }
 }
