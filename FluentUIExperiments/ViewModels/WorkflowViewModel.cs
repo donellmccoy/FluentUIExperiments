@@ -160,10 +160,18 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
 
     private async Task InitializeViewModelAsync()
     {
-        Counties = await _cacheService.GetCountiesAsync();
-        TypesOfInstruments = await _cacheService.GetTypesOfInstrumentsAsync();
-        TypesOfWork = await _cacheService.GetTypesOfWorkAsync();
-        TypesOfCountBy = await _cacheService.GetTypesOfCountByAsync();
+        var (counties, typeOfInstruments, typeOfWorks, typeOfCountBys) = await TaskEx.WhenAll
+        (
+            _cacheService.GetCountiesAsync(),
+            _cacheService.GetTypesOfInstrumentsAsync(),
+            _cacheService.GetTypesOfWorkAsync(), 
+            _cacheService.GetTypesOfCountByAsync()
+        );
+
+        Counties = counties;
+        TypesOfInstruments = typeOfInstruments;
+        TypesOfWork = typeOfWorks;
+        TypesOfCountBy = typeOfCountBys;
     }
 
     private void EnableControls(bool isEnabled)

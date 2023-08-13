@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Castle.Core.Logging;
 using FluentUIExperiments.Models;
 using FluentUIExperiments.Options;
 using FluentUIExperiments.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Polly;
@@ -34,57 +36,51 @@ public class DataService : IDataService
 
     public async Task<IEnumerable<County>> GetCountiesAsync(CancellationToken token = default)
     {
-        return await ExecuteTaskAsync(() =>
+        return await ExecuteTaskWithPolicyAsync(async () =>
         {
-            return Task.Run(() => new List<County>
-            {
-                new() { CountyId = 1, Name = "Miami/Dade" },
-                new() { CountyId = 2, Name = "Orange" },
-                new() { CountyId = 3, Name = "Brevard" },
-            }, token);
+            _logger.LogInformation("getting counties");
+
+            await using var context = new DataCenterWorkflowContext();
+            var counties = await context.Counties.ToListAsync(token);
+
+            return counties;
         });
     }
 
     public async Task<IEnumerable<TypeOfInstrument>> GetTypesOfInstrumentsAsync(CancellationToken token = default)
     {
-        return await ExecuteTaskAsync(() =>
+        return await ExecuteTaskWithPolicyAsync(async () =>
         {
-            return Task.Run(() => new List<TypeOfInstrument>
-            {
-                new() { TypeOfInstrumentId = 1, Name = "TypeOfInstrument 1" },
-                new() { TypeOfInstrumentId = 2, Name = "TypeOfInstrument 2" },
-                new() { TypeOfInstrumentId = 3, Name = "TypeOfInstrument 3" },
-            }, token);
+            await using var context = new DataCenterWorkflowContext();
+            var typeOfInstruments = await context.TypeOfInstruments.ToListAsync(token);
+
+            return typeOfInstruments;
         });
     }
 
     public async Task<IEnumerable<TypeOfWork>> GetTypesOfWorkAsync(CancellationToken token = default)
     {
-        return await ExecuteTaskAsync(() =>
+        return await ExecuteTaskWithPolicyAsync(async () =>
         {
-            return Task.Run(() => new List<TypeOfWork>
-            {
-                new() { TypeOfWorkId = 1, Name = "TypeOfWork 1" },
-                new() { TypeOfWorkId = 2, Name = "TypeOfWork 2" },
-                new() { TypeOfWorkId = 3, Name = "TypeOfWork 3" },
-            }, token);
+            await using var context = new DataCenterWorkflowContext();
+            var typeOfWorks = await context.TypeOfWorks.ToListAsync(token);
+
+            return typeOfWorks;
         });
     }
 
     public async Task<IEnumerable<TypeOfCountBy>> GetTypesOfCountByAsync(CancellationToken token = default)
     {
-        return await ExecuteTaskAsync(() =>
+        return await ExecuteTaskWithPolicyAsync(async () =>
         {
-            return Task.Run(() => new List<TypeOfCountBy>
-            {
-                new() { TypeOfCountById = 1, Name = "TypeOfCountBy 1" },
-                new() { TypeOfCountById = 2, Name = "TypeOfCountBy 2" },
-                new() { TypeOfCountById = 3, Name = "TypeOfCountBy 3" },
-            }, token);
+            await using var context = new DataCenterWorkflowContext();
+            var typeOfCountBys = await context.TypeOfCountBys.ToListAsync(token);
+
+            return typeOfCountBys;
         });
     }
 
-    private async Task<TEntity> ExecuteTaskAsync<TEntity>(Func<Task<TEntity>> action)
+    private async Task<TEntity> ExecuteTaskWithPolicyAsync<TEntity>(Func<Task<TEntity>> action)
     {
         return await Policy.Handle<AggregateException>()
                            .RetryAsync(_options.Value.DatabaseOptions.AllowedRetries, onRetry: (exception, retryCount, context) =>

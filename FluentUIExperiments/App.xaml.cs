@@ -1,8 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
-using System.Windows.Navigation;
 using System.Windows.Threading;
+using FluentUIExperiments.Models;
 using FluentUIExperiments.Options;
 using FluentUIExperiments.Services;
 using FluentUIExperiments.Services.Interfaces;
@@ -54,7 +53,6 @@ public partial class App
     private async void OnStartup(object sender, StartupEventArgs e)
     {
         await Host.StartAsync();
-        await Host.Services.GetService<ICacheService>().LoadCacheAsync();
     }
 
     /// <summary>

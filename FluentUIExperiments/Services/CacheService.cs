@@ -1,15 +1,13 @@
-﻿using FluentUIExperiments.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
-using System;
+using FluentUIExperiments.Models;
+using FluentUIExperiments.Options;
 using FluentUIExperiments.Services.Interfaces;
+using Meziantou.Framework;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using System.Threading;
-using FluentUIExperiments.Options;
 using Microsoft.Extensions.Options;
-using System.Collections.Concurrent;
-using Meziantou.Framework;
 
 namespace FluentUIExperiments.Services;
 
@@ -55,7 +53,7 @@ public class CacheService : ICacheService
         {
             _logger.LogInformation("caching counties");
 
-            entry.AbsoluteExpirationRelativeToNow = _cacheOptions.AbsoluteExpirationRelativeToNow;
+            entry.SetAbsoluteExpiration(_cacheOptions.AbsoluteExpirationRelativeToNow);
 
             return _dataService.GetCountiesAsync(token);
         });
@@ -67,7 +65,7 @@ public class CacheService : ICacheService
         {
             _logger.LogInformation("caching types of instruments");
 
-            entry.AbsoluteExpirationRelativeToNow = _cacheOptions.AbsoluteExpirationRelativeToNow;
+            entry.SetAbsoluteExpiration(_cacheOptions.AbsoluteExpirationRelativeToNow);
 
             return _dataService.GetTypesOfInstrumentsAsync(token);
         });
@@ -79,7 +77,7 @@ public class CacheService : ICacheService
         {
             _logger.LogInformation("caching types of work");
 
-            entry.AbsoluteExpirationRelativeToNow = _cacheOptions.AbsoluteExpirationRelativeToNow;
+            entry.SetAbsoluteExpiration(_cacheOptions.AbsoluteExpirationRelativeToNow);
 
             return _dataService.GetTypesOfWorkAsync(token);
         });
@@ -91,7 +89,7 @@ public class CacheService : ICacheService
         {
             _logger.LogInformation("caching types of count by");
 
-            entry.AbsoluteExpirationRelativeToNow = _cacheOptions.AbsoluteExpirationRelativeToNow;
+            entry.SetAbsoluteExpiration(_cacheOptions.AbsoluteExpirationRelativeToNow);
 
             return _dataService.GetTypesOfCountByAsync(token);
         });
