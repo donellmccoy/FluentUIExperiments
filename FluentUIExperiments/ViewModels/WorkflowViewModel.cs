@@ -9,7 +9,6 @@ using FluentUIExperiments.Enumerations;
 using FluentUIExperiments.Models;
 using FluentUIExperiments.Options;
 using FluentUIExperiments.Services.Interfaces;
-using Meziantou.Framework;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Wpf.Ui.Common.Interfaces;
@@ -160,18 +159,10 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
 
     private async Task InitializeViewModelAsync()
     {
-        var (counties, typeOfInstruments, typeOfWorks, typeOfCountBys) = await TaskEx.WhenAll
-        (
-            _cacheService.GetCountiesAsync(),
-            _cacheService.GetTypesOfInstrumentsAsync(),
-            _cacheService.GetTypesOfWorkAsync(), 
-            _cacheService.GetTypesOfCountByAsync()
-        );
-
-        Counties = counties;
-        TypesOfInstruments = typeOfInstruments;
-        TypesOfWork = typeOfWorks;
-        TypesOfCountBy = typeOfCountBys;
+        Counties = await _cacheService.GetCountiesAsync();
+        TypesOfInstruments = await _cacheService.GetTypesOfInstrumentsAsync();
+        TypesOfWork = await _cacheService.GetTypesOfWorkAsync();
+        TypesOfCountBy = await _cacheService.GetTypesOfCountByAsync();
     }
 
     private void EnableControls(bool isEnabled)

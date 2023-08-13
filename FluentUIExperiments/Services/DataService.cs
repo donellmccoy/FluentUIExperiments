@@ -16,7 +16,7 @@ public class DataService : IDataService
 {
     #region Fields
 
-    private readonly IDbContextFactory<DataCenterWorkflowContext> _factory;
+    private readonly IDbContextFactory<ApplicationDbContext> _factory;
     private readonly IOptions<AppSettings> _options;
     private readonly ILogger<DataService> _logger;
 
@@ -24,7 +24,7 @@ public class DataService : IDataService
 
     #region Constructors
 
-    public DataService(IDbContextFactory<DataCenterWorkflowContext> factory, IOptions<AppSettings> options, ILogger<DataService> logger)
+    public DataService(IDbContextFactory<ApplicationDbContext> factory, IOptions<AppSettings> options, ILogger<DataService> logger)
     {
         _factory = factory;
         _options = options;

@@ -2,9 +2,9 @@
 
 namespace FluentUIExperiments.Models;
 
-public class DataCenterWorkflowContext : DbContext
+public class ApplicationDbContext : DbContext
 {
-    public DataCenterWorkflowContext(DbContextOptions<DataCenterWorkflowContext> options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
     }

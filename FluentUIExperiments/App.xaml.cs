@@ -46,7 +46,7 @@ public partial class App
 
             services.Configure<AppSettings>(context.Configuration);
 
-            services.AddDbContextFactory<DataCenterWorkflowContext>(optionsBuilder =>
+            services.AddDbContextFactory<ApplicationDbContext>(optionsBuilder =>
             {
                 optionsBuilder.UseLazyLoadingProxies();
                 optionsBuilder.EnableDetailedErrors();
