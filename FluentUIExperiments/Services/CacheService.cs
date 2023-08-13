@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Castle.Components.DictionaryAdapter.Xml;
 using FluentUIExperiments.Models;
 using FluentUIExperiments.Options;
 using FluentUIExperiments.Services.Interfaces;
@@ -43,56 +44,59 @@ public class CacheService : ICacheService
             GetCountiesAsync(),
             GetTypesOfInstrumentsAsync(),
             GetTypesOfWorkAsync(),
-            GetTypesOfCountByAsync()
+            GetTypesOfCountBysAsync()
         );
     }
 
-    public async Task<IEnumerable<County>> GetCountiesAsync(CancellationToken token = default)
+    public async Task<IReadOnlyList<County>> GetCountiesAsync(CancellationToken token = default)
     {
-        return await _cache.GetOrCreateAsync("counties", entry =>
+        return await _cache.GetOrCreateAsync(CacheKeys.Counties, entry =>
         {
-            _logger.LogInformation("caching counties");
-
-            entry.SetAbsoluteExpiration(_cacheOptions.AbsoluteExpirationRelativeToNow);
-
+            entry.SetAbsoluteExpiration(_cacheOptions.AbsoluteExpiration);
             return _dataService.GetCountiesAsync(token);
         });
     }
 
-    public async Task<IEnumerable<TypeOfInstrument>> GetTypesOfInstrumentsAsync(CancellationToken token = default)
+    public async Task<IReadOnlyList<TypeOfInstrument>> GetTypesOfInstrumentsAsync(CancellationToken token = default)
     {
-        return await _cache.GetOrCreateAsync("types_of_instruments", entry =>
+        return await _cache.GetOrCreateAsync(CacheKeys.TypesOfInstruments, entry =>
         {
-            _logger.LogInformation("caching types of instruments");
-
-            entry.SetAbsoluteExpiration(_cacheOptions.AbsoluteExpirationRelativeToNow);
-
+            entry.SetAbsoluteExpiration(_cacheOptions.AbsoluteExpiration);
             return _dataService.GetTypesOfInstrumentsAsync(token);
         });
     }
 
-    public async Task<IEnumerable<TypeOfWork>> GetTypesOfWorkAsync(CancellationToken token = default)
+    public async Task<IReadOnlyList<TypeOfWork>> GetTypesOfWorkAsync(CancellationToken token = default)
     {
-        return await _cache.GetOrCreateAsync("types_of_work", entry =>
+        return await _cache.GetOrCreateAsync(CacheKeys.TypesOfWork, entry =>
         {
-            _logger.LogInformation("caching types of work");
-
-            entry.SetAbsoluteExpiration(_cacheOptions.AbsoluteExpirationRelativeToNow);
-
+            entry.SetAbsoluteExpiration(_cacheOptions.AbsoluteExpiration);
             return _dataService.GetTypesOfWorkAsync(token);
         });
     }
 
-    public async Task<IEnumerable<TypeOfCountBy>> GetTypesOfCountByAsync(CancellationToken token = default)
+    public async Task<IReadOnlyList<TypeOfCountBy>> GetTypesOfCountBysAsync(CancellationToken token = default)
     {
-        return await _cache.GetOrCreateAsync("types_of_count_by", entry =>
+        return await _cache.GetOrCreateAsync(CacheKeys.TypesOfCountBys, entry =>
         {
-            _logger.LogInformation("caching types of count by");
-
-            entry.SetAbsoluteExpiration(_cacheOptions.AbsoluteExpirationRelativeToNow);
-
+            entry.SetAbsoluteExpiration(_cacheOptions.AbsoluteExpiration);
             return _dataService.GetTypesOfCountBysAsync(token);
         });
+    }
+
+    #endregion
+
+    #region Classes
+
+    private static class CacheKeys
+    {
+        public const string Counties = $"_{nameof(Counties)}";
+
+        public const string TypesOfInstruments = $"_{nameof(TypesOfInstruments)}";
+
+        public const string TypesOfWork = $"_{nameof(TypesOfWork)}";
+
+        public const string TypesOfCountBys = $"_{nameof(TypesOfCountBys)}";
     }
 
     #endregion

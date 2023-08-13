@@ -162,7 +162,7 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
         Counties = await _cacheService.GetCountiesAsync();
         TypesOfInstruments = await _cacheService.GetTypesOfInstrumentsAsync();
         TypesOfWork = await _cacheService.GetTypesOfWorkAsync();
-        TypesOfCountBy = await _cacheService.GetTypesOfCountByAsync();
+        TypesOfCountBy = await _cacheService.GetTypesOfCountBysAsync();
     }
 
     private void EnableControls(bool isEnabled)

@@ -9,4 +9,10 @@ public class CacheOptions
         get;
         set;
     }
+
+    public TimeSpan AbsoluteExpiration
+    {
+        get;
+        set;
+    }
 }

@@ -35,7 +35,7 @@ public class DataService : IDataService
 
     #region Methods
 
-    public async Task<IEnumerable<County>> GetCountiesAsync(CancellationToken token = default)
+    public async Task<IReadOnlyList<County>> GetCountiesAsync(CancellationToken token = default)
     {
         return await ExecuteWithRetryAsync(async () =>
         {
@@ -46,7 +46,7 @@ public class DataService : IDataService
         });
     }
 
-    public async Task<IEnumerable<TypeOfInstrument>> GetTypesOfInstrumentsAsync(CancellationToken token = default)
+    public async Task<IReadOnlyList<TypeOfInstrument>> GetTypesOfInstrumentsAsync(CancellationToken token = default)
     {
         return await ExecuteWithRetryAsync(async () =>
         {
@@ -57,7 +57,7 @@ public class DataService : IDataService
         });
     }
 
-    public async Task<IEnumerable<TypeOfWork>> GetTypesOfWorkAsync(CancellationToken token = default)
+    public async Task<IReadOnlyList<TypeOfWork>> GetTypesOfWorkAsync(CancellationToken token = default)
     {
         return await ExecuteWithRetryAsync(async () =>
         {
@@ -68,7 +68,7 @@ public class DataService : IDataService
         });
     }
 
-    public async Task<IEnumerable<TypeOfCountBy>> GetTypesOfCountBysAsync(CancellationToken token = default)
+    public async Task<IReadOnlyList<TypeOfCountBy>> GetTypesOfCountBysAsync(CancellationToken token = default)
     {
         return await ExecuteWithRetryAsync(async () =>
         {
