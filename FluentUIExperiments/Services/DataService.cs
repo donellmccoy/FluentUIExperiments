@@ -79,11 +79,11 @@ public class DataService : IDataService
         });
     }
 
-    private async Task<TEntity> ExecuteWithRetryAsync<TEntity>(Func<Task<TEntity>> action)
+    private async Task<TEntity> ExecuteWithRetryAsync<TEntity>(Func<Task<TEntity>> taskFactory)
     {
         return await Policy.Handle<AggregateException>()
                            .RetryAsync(_options.Value.DatabaseOptions.AllowedRetries, onRetry: OnRetry)
-                           .ExecuteAsync(action);
+                           .ExecuteAsync(taskFactory);
 
         void OnRetry(Exception exception, int retryCount, Context context)
         {

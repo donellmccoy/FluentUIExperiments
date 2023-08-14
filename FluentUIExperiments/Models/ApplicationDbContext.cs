@@ -28,7 +28,7 @@ public class ApplicationDbContext : DbContext
         get; set;
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
     }
 }

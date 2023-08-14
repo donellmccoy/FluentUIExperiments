@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Castle.Components.DictionaryAdapter.Xml;
 using FluentUIExperiments.Models;
 using FluentUIExperiments.Options;
 using FluentUIExperiments.Services.Interfaces;
