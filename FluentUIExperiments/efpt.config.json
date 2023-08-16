@@ -1,0 +1,47 @@
+﻿{
+   "CodeGenerationMode": 3,
+   "ContextClassName": "DataCenterWorkflowContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": true,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models1",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "FluentUIExperiments",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "[dbo].[USP_GET_INITIALIZATION_DATA_1]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[USP_GET_INITIALIZATION_DATA]",
+         "ObjectType": 1
+      }
+   ],
+   "UiHint": "(localdb)\\MSSQLLocalDB.DataCenterWorkflow",
+   "UncountableWords": null,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDateOnlyTimeOnly": false,
+   "UseDbContextSplitting": true,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false
+}

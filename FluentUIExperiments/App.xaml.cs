@@ -48,9 +48,8 @@ public partial class App
 
             services.AddDbContextFactory<ApplicationDbContext>(optionsBuilder =>
             {
-                optionsBuilder.UseLazyLoadingProxies();
                 optionsBuilder.EnableDetailedErrors();
-                optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=DataCenterWorkflow", builder =>
+                optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=DataCenterWorkflow;MultipleActiveResultSets=True", builder =>
                 {
                     builder.EnableRetryOnFailure(3);
                 });

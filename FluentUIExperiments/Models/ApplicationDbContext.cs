@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace FluentUIExperiments.Models;
 
@@ -30,5 +33,19 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<GetInitializationDataResult>(entity =>
+        {
+            entity.HasNoKey();
+        });
+    }
+
+    public virtual DbSet<GetInitializationDataResult> GetEmployeesWithDepartmentResults
+    {
+        get; set;
+    }
+
+    public IEnumerable<GetInitializationDataResult> SP_GetInitializationData()
+    {
+        return GetEmployeesWithDepartmentResults.FromSqlInterpolated($"[dbo].[USP_GET_INITIALIZATION_DATA_1]").ToArray();
     }
 }
