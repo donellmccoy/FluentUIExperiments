@@ -35,12 +35,12 @@ public class DataService : IDataService
 
     #region Methods
 
-    public async Task<IReadOnlyList<FilterData>> GetFilterInformation(CancellationToken token = default)
+    public async Task<IReadOnlyList<FilterData>> GetFilterDataAsync(CancellationToken token = default)
     {
         return await ExecuteWithRetryAsync(async () =>
         {
             await using var context = await _factory.CreateDbContextAsync(token);
-            return await context.GetFilterDataAsync(token).ConfigureAwait(true);
+            return await context.GetFilterDataAsync(token);
         });
     }
 
@@ -91,13 +91,11 @@ public class DataService : IDataService
     private async Task<TEntity> ExecuteWithRetryAsync<TEntity>(Func<Task<TEntity>> taskFactory)
     {
         return await Policy.Handle<AggregateException>()
-                           .RetryAsync(_options.Value.DatabaseOptions.AllowedRetries, onRetry: OnRetry)
+                           .RetryAsync(_options.Value.DatabaseOptions.AllowedRetries, (exception, retryCount, _) =>
+                           {
+                               _logger.LogError("{retryCount} retry attempt to retrieve types of count by. exception: {exception}", retryCount, exception);
+                           })
                            .ExecuteAsync(taskFactory);
-
-        void OnRetry(Exception exception, int retryCount, Context context)
-        {
-            _logger.LogError("{retryCount} retry attempt to retrieve types of count by. exception: {exception}", retryCount, exception);
-        }
     }
 
     #endregion

@@ -45,7 +45,7 @@ public class CacheService : ICacheService
         return await _cache.GetOrCreateAsync(CacheKeys.FilterData, entry =>
         {
             entry.SetAbsoluteExpiration(_cacheOptions.AbsoluteExpiration);
-            return _dataService.GetFilterInformation(token);
+            return _dataService.GetFilterDataAsync(token);
         });
     }
 

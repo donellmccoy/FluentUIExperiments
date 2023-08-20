@@ -7,48 +7,64 @@ namespace FluentUIExperiments.Extensions;
 
 public static class FilterInformationExtensions
 {
-    public static List<County> GetCounties(this IReadOnlyList<FilterData> filterInformation)
+    public static IEnumerable<County> GetCounties(this IReadOnlyList<FilterData> filterInformation)
     {
-        return filterInformation.Where(p => Predicate(p, "Counties")).Select(p => new County
+        return filterInformation.Where(p => Predicate(p, DiscriminatorNames.Counties)).Select(p => new County
         {
             CountyId = p.Id,
-            Name = p.Name
-
-        }).ToList();
+            Name = p.Name,
+            Description = p.Description,
+            IsEnabled = p.IsEnabled,
+            IsVisible = p.IsVisible
+        });
     }
 
-    public static List<TypeOfInstrument> GetTypesOfInstruments(this IReadOnlyList<FilterData> filterInformation)
+    public static IEnumerable<TypeOfInstrument> GetTypesOfInstruments(this IReadOnlyList<FilterData> filterInformation)
     {
-        return filterInformation.Where(p => Predicate(p, "TypeOfInstruments")).Select(p => new TypeOfInstrument
+        return filterInformation.Where(p => Predicate(p, DiscriminatorNames.TypeOfInstruments)).Select(p => new TypeOfInstrument
         {
             TypeOfInstrumentId = p.Id,
-            Name = p.Name
-
-        }).ToList();
+            Name = p.Name,
+            Description = p.Description,
+            IsEnabled = p.IsEnabled,
+            IsVisible = p.IsVisible
+        });
     }
 
-    public static List<TypeOfWork> GetTypesOfWork(this IReadOnlyList<FilterData> filterInformation)
+    public static IEnumerable<TypeOfWork> GetTypesOfWork(this IReadOnlyList<FilterData> filterInformation)
     {
-        return filterInformation.Where(p => Predicate(p, "TypeOfWorks")).Select(p => new TypeOfWork
+        return filterInformation.Where(p => Predicate(p, DiscriminatorNames.TypeOfWorks)).Select(p => new TypeOfWork
         {
             TypeOfWorkId = p.Id,
-            Name = p.Name
-
-        }).ToList();
+            Name = p.Name,
+            Description = p.Description,
+            IsEnabled = p.IsEnabled,
+            IsVisible = p.IsVisible
+        });
     }
 
-    public static List<TypeOfCountBy> GetTypesOfCountBy(this IReadOnlyList<FilterData> filterInformation)
+    public static IEnumerable<TypeOfCountBy> GetTypesOfCountBy(this IReadOnlyList<FilterData> filterInformation)
     {
-        return filterInformation.Where(p => Predicate(p, "TypeOfCountBys")).Select(p => new TypeOfCountBy
+        return filterInformation.Where(p => Predicate(p, DiscriminatorNames.TypeOfCountBys)).Select(p => new TypeOfCountBy
         {
             TypeOfCountById = p.Id,
-            Name = p.Name
-
-        }).ToList();
+            Name = p.Name,
+            Description = p.Description,
+            IsEnabled = p.IsEnabled,
+            IsVisible = p.IsVisible
+        });
     }
 
     private static bool Predicate(FilterData data, string discriminator)
     {
         return string.Equals(data.Discriminator, discriminator, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static class DiscriminatorNames
+    {
+        public const string Counties = nameof(Counties);
+        public const string TypeOfInstruments = nameof(TypeOfInstruments);
+        public const string TypeOfWorks = nameof(TypeOfWorks);
+        public const string TypeOfCountBys = nameof(TypeOfCountBys);
     }
 }

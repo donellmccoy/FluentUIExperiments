@@ -11,5 +11,5 @@ public interface IDataService
     Task<IReadOnlyList<TypeOfInstrument>> GetTypesOfInstrumentsAsync(CancellationToken token = default);
     Task<IReadOnlyList<TypeOfWork>> GetTypesOfWorkAsync(CancellationToken token = default);
     Task<IReadOnlyList<TypeOfCountBy>> GetTypesOfCountBysAsync(CancellationToken token = default);
-    Task<IReadOnlyList<FilterData>> GetFilterInformation(CancellationToken token = default);
+    Task<IReadOnlyList<FilterData>> GetFilterDataAsync(CancellationToken token = default);
 }

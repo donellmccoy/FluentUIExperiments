@@ -156,18 +156,18 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
             SendBusyMessage(BusyType.NotBusy);
             EnableControls(true);
         }
-    }
 
-    private async Task InitializeViewModelAsync()
-    {
-        var filterData = await _cacheService.GetFilterDataAsync();
+        async Task InitializeViewModelAsync()
+        {
+            var filterData = await _cacheService.GetFilterDataAsync();
 
-        Counties = filterData.GetCounties();
-        TypesOfInstruments = filterData.GetTypesOfInstruments();
-        TypesOfWork = filterData.GetTypesOfWork();
-        TypesOfCountBys = filterData.GetTypesOfCountBy();
+            Counties = filterData.GetCounties();
+            TypesOfInstruments = filterData.GetTypesOfInstruments();
+            TypesOfWork = filterData.GetTypesOfWork();
+            TypesOfCountBys = filterData.GetTypesOfCountBy();
 
-        SelectedNumberOfUnits = 50;
+            SelectedNumberOfUnits = 50;
+        }
     }
 
     private void EnableControls(bool isEnabled)

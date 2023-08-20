@@ -25,6 +25,7 @@
                 <x:Type TypeName="enumerations:Status" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </ui:UiPage.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -52,7 +53,14 @@
                     ItemsSource="{Binding ViewModel.Counties}"
                     SelectedIndex="0"
                     SelectedItem="{Binding ViewModel.SelectedCounty}"
-                    SelectedValuePath="CountyId" />
+                    SelectedValuePath="CountyId">
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
+                            <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                </ComboBox>
                 <Label
                     Margin="0,12,0,0"
                     Content="Type of Work"
@@ -63,7 +71,15 @@
                     ItemsSource="{Binding ViewModel.TypesOfWork}"
                     SelectedIndex="0"
                     SelectedItem="{Binding ViewModel.SelectedTypeOfWork}"
-                    SelectedValuePath="TypeOfWorkId" />
+                    SelectedValuePath="TypeOfWorkId">
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="ToolTip" Value="{Binding Description}" />
+                            <Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
+                            <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                </ComboBox>
                 <Label
                     Margin="0,12,0,0"
                     Content="Type of Instrument"
@@ -74,7 +90,14 @@
                     ItemsSource="{Binding ViewModel.TypesOfInstruments}"
                     SelectedIndex="0"
                     SelectedItem="{Binding ViewModel.SelectedTypeOfInstrument}"
-                    SelectedValuePath="TypeOfInstrumentId" />
+                    SelectedValuePath="TypeOfInstrumentId">
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
+                            <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                </ComboBox>
                 <Label
                     Margin="0,12,0,0"
                     Content="Before Date"
@@ -109,7 +132,14 @@
                     DisplayMemberPath="Name"
                     ItemsSource="{Binding ViewModel.TypesOfCountBys}"
                     SelectedItem="{Binding ViewModel.SelectedTypeOfCountBy}"
-                    SelectedValuePath="TypeOfCountById" />
+                    SelectedValuePath="TypeOfCountById">
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
+                            <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                </ComboBox>
                 <ui:ToggleSwitch
                     Margin="0,20,0,0"
                     Content="Include MCN with criminal and suspect"

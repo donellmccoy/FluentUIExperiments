@@ -33,16 +33,18 @@ public class ApplicationDbContext : DbContext
         get; set;
     }
 
-    public virtual DbSet<FilterData> FilterData
+    public DbSet<FilterData> FilterData
     {
         get; set;
     }
 
     public int GetCountOfSomethingById(int id) => throw new NotImplementedException();
 
-    public async Task<List<FilterData>> GetFilterDataAsync(CancellationToken token = default)
+    public async Task<IReadOnlyList<FilterData>> GetFilterDataAsync(CancellationToken token = default)
     {
-        return await FilterData.FromSqlInterpolated($"[dbo].[uspGetFilterData]").ToListAsync(token);
+        return await FilterData.FromSqlRaw("[dbo].[uspGetFilterData]")
+                               .AsNoTracking()
+                               .ToListAsync(token);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

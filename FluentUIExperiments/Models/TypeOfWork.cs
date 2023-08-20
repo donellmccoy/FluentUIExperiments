@@ -13,4 +13,22 @@ public class TypeOfWork
         get;
         set;
     }
+
+    public string Description
+    {
+        get;
+        set;
+    }
+
+    public bool IsEnabled
+    {
+        get;
+        set;
+    }
+
+    public bool IsVisible
+    {
+        get;
+        set;
+    }
 }
