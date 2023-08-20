@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace FluentUIExperiments.Models;
@@ -16,6 +17,7 @@ public class ApplicationDbContext : DbContext
     {
         get; set;
     }
+
     public DbSet<TypeOfInstrument> TypeOfInstruments
     {
         get; set;
@@ -31,21 +33,28 @@ public class ApplicationDbContext : DbContext
         get; set;
     }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<GetInitializationDataResult>(entity =>
-        {
-            entity.HasNoKey();
-        });
-    }
-
-    public virtual DbSet<GetInitializationDataResult> GetEmployeesWithDepartmentResults
+    public virtual DbSet<FilterData> FilterData
     {
         get; set;
     }
 
-    public IEnumerable<GetInitializationDataResult> SP_GetInitializationData()
+    public int GetCountOfSomethingById(int id) => throw new NotImplementedException();
+
+    public async Task<List<FilterData>> GetFilterDataAsync(CancellationToken token = default)
     {
-        return GetEmployeesWithDepartmentResults.FromSqlInterpolated($"[dbo].[USP_GET_INITIALIZATION_DATA_1]").ToArray();
+        return await FilterData.FromSqlInterpolated($"[dbo].[uspGetFilterData]").ToListAsync(token);
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        //configuration for calling a user-defined scalar valued function
+        modelBuilder.HasDbFunction(typeof(ApplicationDbContext).GetMethod(nameof(GetCountOfSomethingById)), builder =>
+        {
+            builder.HasParameter("id");
+        });
+
+        modelBuilder.Entity<FilterData>(entity => entity.HasNoKey());
     }
 }

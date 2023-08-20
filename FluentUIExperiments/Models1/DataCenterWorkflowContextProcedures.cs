@@ -81,6 +81,7 @@ namespace FluentUIExperiments.Models1
             {
                 parameterreturnValue,
             };
+
             var _ = await _context.SqlQueryAsync<USP_GET_INITIALIZATION_DATA_1Result>("EXEC @returnValue = [dbo].[USP_GET_INITIALIZATION_DATA_1]", sqlParameters, cancellationToken);
 
             returnValue?.SetValue(parameterreturnValue.Value);

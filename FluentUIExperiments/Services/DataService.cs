@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentUIExperiments.Models;
@@ -36,14 +35,21 @@ public class DataService : IDataService
 
     #region Methods
 
-
+    public async Task<IReadOnlyList<FilterData>> GetFilterInformation(CancellationToken token = default)
+    {
+        return await ExecuteWithRetryAsync(async () =>
+        {
+            await using var context = await _factory.CreateDbContextAsync(token);
+            return await context.GetFilterDataAsync(token).ConfigureAwait(true);
+        });
+    }
 
     public async Task<IReadOnlyList<County>> GetCountiesAsync(CancellationToken token = default)
     {
         return await ExecuteWithRetryAsync(async () =>
         {
             await using var context = await _factory.CreateDbContextAsync(token);
-            var entities = await context.Counties.ToListAsync(token);
+            var entities = await context.Counties.AsNoTracking().ToListAsync(token);
 
             return entities;
         });
@@ -54,7 +60,7 @@ public class DataService : IDataService
         return await ExecuteWithRetryAsync(async () =>
         {
             await using var context = await _factory.CreateDbContextAsync(token);
-            var entities = await context.TypeOfInstruments.ToListAsync(token);
+            var entities = await context.TypeOfInstruments.AsNoTracking().ToListAsync(token);
 
             return entities;
         });
@@ -65,7 +71,7 @@ public class DataService : IDataService
         return await ExecuteWithRetryAsync(async () =>
         {
             await using var context = await _factory.CreateDbContextAsync(token);
-            var entities = await context.TypeOfWorks.ToListAsync(token);
+            var entities = await context.TypeOfWorks.AsNoTracking().ToListAsync(token);
 
             return entities;
         });
@@ -76,7 +82,7 @@ public class DataService : IDataService
         return await ExecuteWithRetryAsync(async () =>
         {
             await using var context = await _factory.CreateDbContextAsync(token);
-            var entities = await context.TypeOfCountBys.ToListAsync(token);
+            var entities = await context.TypeOfCountBys.AsNoTracking().ToListAsync(token);
 
             return entities;
         });

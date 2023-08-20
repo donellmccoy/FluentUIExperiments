@@ -1,14 +1,20 @@
 ﻿namespace FluentUIExperiments.Models;
 
-public record County
+public class FilterData
 {
-    public int CountyId
+    public int Id
     {
         get;
         set;
     }
 
     public string Name
+    {
+        get;
+        set;
+    }
+
+    public string Discriminator
     {
         get;
         set;

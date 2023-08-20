@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using FluentUIExperiments.Models;
 using FluentUIExperiments.Options;
 using FluentUIExperiments.Services.Interfaces;
-using Meziantou.Framework;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -38,13 +37,16 @@ public class CacheService : ICacheService
 
     public async Task LoadCacheAsync()
     {
-        await TaskEx.WhenAll
-        (
-            GetCountiesAsync(),
-            GetTypesOfInstrumentsAsync(),
-            GetTypesOfWorkAsync(),
-            GetTypesOfCountBysAsync()
-        );
+        await GetFilterDataAsync();
+    }
+
+    public async Task<IReadOnlyList<FilterData>> GetFilterDataAsync(CancellationToken token = default)
+    {
+        return await _cache.GetOrCreateAsync(CacheKeys.FilterData, entry =>
+        {
+            entry.SetAbsoluteExpiration(_cacheOptions.AbsoluteExpiration);
+            return _dataService.GetFilterInformation(token);
+        });
     }
 
     public async Task<IReadOnlyList<County>> GetCountiesAsync(CancellationToken token = default)
@@ -96,6 +98,8 @@ public class CacheService : ICacheService
         public const string TypesOfWork = $"_{nameof(TypesOfWork)}";
 
         public const string TypesOfCountBys = $"_{nameof(TypesOfCountBys)}";
+
+        public const string FilterData = $"_{nameof(FilterData)}";
     }
 
     #endregion

@@ -50,6 +50,7 @@
                     x:Name="CountyComboBox"
                     DisplayMemberPath="Name"
                     ItemsSource="{Binding ViewModel.Counties}"
+                    SelectedIndex="0"
                     SelectedItem="{Binding ViewModel.SelectedCounty}"
                     SelectedValuePath="CountyId" />
                 <Label
@@ -60,6 +61,7 @@
                     x:Name="TypesOfWorkComboBox"
                     DisplayMemberPath="Name"
                     ItemsSource="{Binding ViewModel.TypesOfWork}"
+                    SelectedIndex="0"
                     SelectedItem="{Binding ViewModel.SelectedTypeOfWork}"
                     SelectedValuePath="TypeOfWorkId" />
                 <Label
@@ -70,6 +72,7 @@
                     x:Name="TypesOfInstrumentsComboBox"
                     DisplayMemberPath="Name"
                     ItemsSource="{Binding ViewModel.TypesOfInstruments}"
+                    SelectedIndex="0"
                     SelectedItem="{Binding ViewModel.SelectedTypeOfInstrument}"
                     SelectedValuePath="TypeOfInstrumentId" />
                 <Label
@@ -104,7 +107,7 @@
                     x:Name="TypesOfCountByComboBox"
                     Margin="0,0,0,0"
                     DisplayMemberPath="Name"
-                    ItemsSource="{Binding ViewModel.TypesOfCountBy}"
+                    ItemsSource="{Binding ViewModel.TypesOfCountBys}"
                     SelectedItem="{Binding ViewModel.SelectedTypeOfCountBy}"
                     SelectedValuePath="TypeOfCountById" />
                 <ui:ToggleSwitch

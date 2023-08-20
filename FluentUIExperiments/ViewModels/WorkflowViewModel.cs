@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FluentUIExperiments.Enumerations;
+using FluentUIExperiments.Extensions;
 using FluentUIExperiments.Models;
 using FluentUIExperiments.Options;
 using FluentUIExperiments.Services.Interfaces;
@@ -56,7 +57,7 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
     private TypeOfInstrument _selectedTypeOfInstrument;
 
     [ObservableProperty]
-    private IEnumerable<TypeOfCountBy> _typesOfCountBy = Enumerable.Empty<TypeOfCountBy>();
+    private IEnumerable<TypeOfCountBy> _typesOfCountBys = Enumerable.Empty<TypeOfCountBy>();
 
     [ObservableProperty]
     private TypeOfCountBy _selectedTypeOfCountBy;
@@ -159,10 +160,14 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
 
     private async Task InitializeViewModelAsync()
     {
-        Counties = await _cacheService.GetCountiesAsync();
-        TypesOfInstruments = await _cacheService.GetTypesOfInstrumentsAsync();
-        TypesOfWork = await _cacheService.GetTypesOfWorkAsync();
-        TypesOfCountBy = await _cacheService.GetTypesOfCountBysAsync();
+        var filterData = await _cacheService.GetFilterDataAsync();
+
+        Counties = filterData.GetCounties();
+        TypesOfInstruments = filterData.GetTypesOfInstruments();
+        TypesOfWork = filterData.GetTypesOfWork();
+        TypesOfCountBys = filterData.GetTypesOfCountBy();
+
+        SelectedNumberOfUnits = 50;
     }
 
     private void EnableControls(bool isEnabled)

@@ -17,45 +17,49 @@ namespace FluentUIExperiments;
 
 public partial class App
 {
-    private static readonly IHost Host = Microsoft.Extensions.Hosting.Host
-        .CreateDefaultBuilder()
-        .ConfigureAppConfiguration(builder =>
-        {
-            builder.SetBasePath(Directory.GetCurrentDirectory());
-            builder.AddJsonFile("appsettings.json", false, true);
-        })
-        .ConfigureServices((context, services) =>
-        {
-            services.AddHostedService<ApplicationHostService>();
-            services.AddMemoryCache();
-            services.AddSingleton<IPageService, PageService>();
-            services.AddSingleton<IThemeService, ThemeService>();
-            services.AddSingleton<ITaskBarService, TaskBarService>();
-            services.AddSingleton<INavigationService, NavigationService>();
-            services.AddSingleton<ISnackbarService, SnackbarService>();
-            services.AddSingleton<ICacheService, CacheService>();
-            services.AddSingleton<IDataService, DataService>();
-            services.AddScoped<INavigationWindow, Views.Windows.MainWindow>();
-            services.AddScoped<ViewModels.MainWindowViewModel>();
-            services.AddScoped<Views.Pages.WorkflowPage>();
-            services.AddScoped<ViewModels.WorkflowViewModel>();
-            services.AddScoped<Views.Pages.DataPage>();
-            services.AddScoped<ViewModels.DataViewModel>();
-            services.AddScoped<Views.Pages.SettingsPage>();
-            services.AddScoped<ViewModels.SettingsViewModel>();
+    private static readonly IHost Host;
 
-            services.Configure<AppSettings>(context.Configuration);
-
-            services.AddDbContextFactory<ApplicationDbContext>(optionsBuilder =>
+    static App()
+    {
+        Host = Microsoft.Extensions.Hosting.Host
+            .CreateDefaultBuilder()
+            .ConfigureAppConfiguration(builder =>
             {
-                optionsBuilder.EnableDetailedErrors();
-                optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=DataCenterWorkflow;MultipleActiveResultSets=True", builder =>
+                builder.SetBasePath(Directory.GetCurrentDirectory());
+                builder.AddJsonFile("appsettings.json", false, true);
+            })
+            .ConfigureServices((context, services) =>
+            {
+                services.AddHostedService<ApplicationHostService>();
+                services.AddMemoryCache();
+                services.AddSingleton<IPageService, PageService>();
+                services.AddSingleton<IThemeService, ThemeService>();
+                services.AddSingleton<ITaskBarService, TaskBarService>();
+                services.AddSingleton<INavigationService, NavigationService>();
+                services.AddSingleton<ISnackbarService, SnackbarService>();
+                services.AddSingleton<ICacheService, CacheService>();
+                services.AddSingleton<IDataService, DataService>();
+                services.AddScoped<INavigationWindow, Views.Windows.MainWindow>();
+                services.AddScoped<ViewModels.MainWindowViewModel>();
+                services.AddScoped<Views.Pages.WorkflowPage>();
+                services.AddScoped<ViewModels.WorkflowViewModel>();
+                services.AddScoped<Views.Pages.DataPage>();
+                services.AddScoped<ViewModels.DataViewModel>();
+                services.AddScoped<Views.Pages.SettingsPage>();
+                services.AddScoped<ViewModels.SettingsViewModel>();
+                services.Configure<AppSettings>(context.Configuration);
+                services.AddDbContextFactory<ApplicationDbContext>(optionsBuilder =>
                 {
-                    builder.EnableRetryOnFailure(3);
+                    optionsBuilder.EnableDetailedErrors();
+                    optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=DataCenterWorkflow;MultipleActiveResultSets=True", builder =>
+                    {
+                        builder.EnableRetryOnFailure(3);
+                    });
                 });
-            });
 
-        }).Build();
+            })
+            .Build();
+    }
 
     /// <summary>
     /// Occurs when the application is loading.
