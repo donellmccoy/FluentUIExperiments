@@ -1,8 +1,8 @@
 ﻿namespace FluentUIExperiments.Models;
 
-public class County
+public class DataCenter
 {
-    public int CountyId
+    public int DataCenterId
     {
         get;
         set;

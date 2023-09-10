@@ -36,6 +36,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Border
             Grid.Row="0"
@@ -43,6 +44,26 @@
             Grid.ColumnSpan="1"
             IsEnabled="{Binding ViewModel.IsEnabled}">
             <StackPanel Orientation="Vertical">
+                <Label
+                    Margin="0,0,0,0"
+                    Content="Data Center"
+                    Target="{Binding ElementName=DataCenterComboBox}" />
+                <ComboBox
+                    x:Name="DataCenterComboBox"
+                    DisplayMemberPath="Name"
+                    ItemsSource="{Binding ViewModel.DataCenters}"
+                    SelectedIndex="0"
+                    SelectedItem="{Binding ViewModel.SelectedDataCenter}"
+                    SelectedValuePath="DataCenterId"
+                    ToolTip="{Binding ViewModel.SelectedDataCenter.Description}">
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="ToolTip" Value="{Binding Description}" />
+                            <Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
+                            <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                </ComboBox>
                 <Label
                     Margin="0,10,0,0"
                     Content="County"
@@ -53,9 +74,11 @@
                     ItemsSource="{Binding ViewModel.Counties}"
                     SelectedIndex="0"
                     SelectedItem="{Binding ViewModel.SelectedCounty}"
-                    SelectedValuePath="CountyId">
+                    SelectedValuePath="CountyId"
+                    ToolTip="{Binding ViewModel.SelectedCounty.Description}">
                     <ComboBox.ItemContainerStyle>
                         <Style TargetType="ComboBoxItem">
+                            <Setter Property="ToolTip" Value="{Binding Description}" />
                             <Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
                             <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         </Style>
@@ -71,7 +94,8 @@
                     ItemsSource="{Binding ViewModel.TypesOfWork}"
                     SelectedIndex="0"
                     SelectedItem="{Binding ViewModel.SelectedTypeOfWork}"
-                    SelectedValuePath="TypeOfWorkId">
+                    SelectedValuePath="TypeOfWorkId"
+                    ToolTip="{Binding ViewModel.SelectedTypeOfWork.Description}">
                     <ComboBox.ItemContainerStyle>
                         <Style TargetType="ComboBoxItem">
                             <Setter Property="ToolTip" Value="{Binding Description}" />
@@ -90,9 +114,11 @@
                     ItemsSource="{Binding ViewModel.TypesOfInstruments}"
                     SelectedIndex="0"
                     SelectedItem="{Binding ViewModel.SelectedTypeOfInstrument}"
-                    SelectedValuePath="TypeOfInstrumentId">
+                    SelectedValuePath="TypeOfInstrumentId"
+                    ToolTip="{Binding ViewModel.SelectedTypeOfInstrument.Description}">
                     <ComboBox.ItemContainerStyle>
                         <Style TargetType="ComboBoxItem">
+                            <Setter Property="ToolTip" Value="{Binding Description}" />
                             <Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
                             <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         </Style>
@@ -128,13 +154,13 @@
                     Target="{Binding ElementName=TypesOfCountByComboBox}" />
                 <ComboBox
                     x:Name="TypesOfCountByComboBox"
-                    Margin="0,0,0,0"
                     DisplayMemberPath="Name"
                     ItemsSource="{Binding ViewModel.TypesOfCountBys}"
                     SelectedItem="{Binding ViewModel.SelectedTypeOfCountBy}"
                     SelectedValuePath="TypeOfCountById">
                     <ComboBox.ItemContainerStyle>
                         <Style TargetType="ComboBoxItem">
+                            <Setter Property="ToolTip" Value="{Binding Description}" />
                             <Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
                             <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         </Style>
@@ -142,72 +168,37 @@
                 </ComboBox>
                 <ui:ToggleSwitch
                     Margin="0,20,0,0"
-                    Content="Include MCN with criminal and suspect"
+                    Content="Include MCN with Criminal and Suspect"
                     IsChecked="{Binding ViewModel.IncludeMcnWithCriminalAndSuspect}" />
                 <ui:ToggleSwitch
                     Margin="0,10,0,0"
-                    Content="Include auto-completed criminal and suspect"
+                    Content="Include auto-completed Criminal and Suspect"
                     IsChecked="{Binding ViewModel.IncludeAutoCompletedCriminalAndSuspect}" />
                 <ui:ToggleSwitch
                     Margin="0,10,0,0"
-                    Content="Include auto-completed junk documents"
+                    Content="Include auto-completed Junk documents"
                     IsChecked="{Binding ViewModel.IncludeAutoCompletedJunkDocuments}" />
                 <ui:ToggleSwitch
                     Margin="0,10,0,0"
                     Content="Include available work"
                     IsChecked="{Binding ViewModel.IncludeAvailableWork}" />
+                <ui:ToggleSwitch
+                    Margin="0,30,0,0"
+                    Content="Save filter settings"
+                    IsChecked="{Binding ViewModel.SaveLastFilterSettings}" />
             </StackPanel>
         </Border>
         <ui:Button
             x:Name="GetWorkButton"
-            Grid.Row="1"
+            Grid.Row="3"
             Grid.RowSpan="1"
             Grid.Column="0"
-            Margin="0,60,0,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Bottom"
             Appearance="Primary"
             Command="{Binding ViewModel.GetCompletedUserEventsCommand, Mode=OneWay}"
-            Content="Get Work"
+            Content="Get New Work"
             Icon="Fluent24"
-            ToolTipService.ToolTip="Gets new work" />
-        <StackPanel
-            Grid.Row="0"
-            Grid.RowSpan="3"
-            Grid.Column="1"
-            Orientation="Vertical">
-            <StackPanel Orientation="Horizontal">
-                <ui:Button
-                    Margin="10,8,0,0"
-                    Appearance="Primary"
-                    Command="{Binding ViewModel.GetCompletedUserEventsCommand, Mode=OneWay}"
-                    Content="Get Work"
-                    ToolTipService.ToolTip="Gets new work" />
-            </StackPanel>
-            <TabControl Margin="10,8,10,0">
-                <TabItem>
-                    <TabItem.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <ui:SymbolIcon Margin="0,0,6,0" Symbol="XboxConsole24" />
-                            <TextBlock Text="Hello" />
-                        </StackPanel>
-                    </TabItem.Header>
-                    <Grid>
-                        <TextBlock Margin="12" Text="Is a lie." />
-                    </Grid>
-                </TabItem>
-                <TabItem IsSelected="True">
-                    <TabItem.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <ui:SymbolIcon Margin="0,0,6,0" Symbol="StoreMicrosoft16" />
-                            <TextBlock Text="The cake" />
-                        </StackPanel>
-                    </TabItem.Header>
-                    <Grid>
-                        <TextBlock Margin="12" Text="Is a lie." />
-                    </Grid>
-                </TabItem>
-            </TabControl>
-        </StackPanel>
+            ToolTipService.ToolTip="Gets new work" Margin="0,0,0,30" />
     </Grid>
 </ui:UiPage>

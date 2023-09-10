@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Polly;
+using Polly.Retry;
 
 namespace FluentUIExperiments.Services;
 
@@ -19,16 +20,26 @@ public class DataService : IDataService
     private readonly IDbContextFactory<ApplicationDbContext> _factory;
     private readonly IOptions<AppSettings> _options;
     private readonly ILogger<DataService> _logger;
+    private readonly AsyncRetryPolicy _retryPolicy;
 
     #endregion
 
     #region Constructors
 
-    public DataService(IDbContextFactory<ApplicationDbContext> factory, IOptions<AppSettings> options, ILogger<DataService> logger)
+    public DataService(IDbContextFactory<ApplicationDbContext> factory, 
+        IOptions<AppSettings> options, 
+        ILogger<DataService> logger)
     {
         _factory = factory;
         _options = options;
         _logger = logger;
+
+        _retryPolicy = Policy.Handle<AggregateException>()
+            .Or<Exception>()
+            .RetryAsync(_options.Value.DatabaseOptions.AllowedRetries, (exception, retryCount, _) =>
+            {
+                _logger.LogError("{retryCount} retry attempt to retrieve filter data. exception: {exception}", retryCount, exception);
+            });
     }
 
     #endregion
@@ -49,9 +60,7 @@ public class DataService : IDataService
         return await ExecuteWithRetryAsync(async () =>
         {
             await using var context = await _factory.CreateDbContextAsync(token);
-            var entities = await context.Counties.AsNoTracking().ToListAsync(token);
-
-            return entities;
+            return await context.Counties.AsNoTracking().ToListAsync(token);
         });
     }
 
@@ -60,9 +69,7 @@ public class DataService : IDataService
         return await ExecuteWithRetryAsync(async () =>
         {
             await using var context = await _factory.CreateDbContextAsync(token);
-            var entities = await context.TypeOfInstruments.AsNoTracking().ToListAsync(token);
-
-            return entities;
+            return await context.TypeOfInstruments.AsNoTracking().ToListAsync(token);
         });
     }
 
@@ -71,9 +78,7 @@ public class DataService : IDataService
         return await ExecuteWithRetryAsync(async () =>
         {
             await using var context = await _factory.CreateDbContextAsync(token);
-            var entities = await context.TypeOfWorks.AsNoTracking().ToListAsync(token);
-
-            return entities;
+            return await context.TypeOfWorks.AsNoTracking().ToListAsync(token);
         });
     }
 
@@ -82,20 +87,13 @@ public class DataService : IDataService
         return await ExecuteWithRetryAsync(async () =>
         {
             await using var context = await _factory.CreateDbContextAsync(token);
-            var entities = await context.TypeOfCountBys.AsNoTracking().ToListAsync(token);
-
-            return entities;
+            return await context.TypeOfCountBys.AsNoTracking().ToListAsync(token);
         });
     }
 
-    private async Task<TEntity> ExecuteWithRetryAsync<TEntity>(Func<Task<TEntity>> taskFactory)
+    private async Task<TEntity> ExecuteWithRetryAsync<TEntity>(Func<Task<TEntity>> action)
     {
-        return await Policy.Handle<AggregateException>()
-                           .RetryAsync(_options.Value.DatabaseOptions.AllowedRetries, (exception, retryCount, _) =>
-                           {
-                               _logger.LogError("{retryCount} retry attempt to retrieve types of count by. exception: {exception}", retryCount, exception);
-                           })
-                           .ExecuteAsync(taskFactory);
+        return await _retryPolicy.ExecuteAsync(action);
     }
 
     #endregion

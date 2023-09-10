@@ -61,11 +61,12 @@ namespace FluentUIExperiments.Models1
             {
                 parameterreturnValue,
             };
-            var _ = await _context.SqlQueryAsync<USP_GET_INITIALIZATION_DATAResult>("EXEC @returnValue = [dbo].[USP_GET_INITIALIZATION_DATA]", sqlParameters, cancellationToken);
+
+            var results = await _context.SqlQueryAsync<USP_GET_INITIALIZATION_DATAResult>("EXEC @returnValue = [dbo].[USP_GET_INITIALIZATION_DATA]", sqlParameters, cancellationToken);
 
             returnValue?.SetValue(parameterreturnValue.Value);
 
-            return _;
+            return results;
         }
 
         public virtual async Task<List<USP_GET_INITIALIZATION_DATA_1Result>> USP_GET_INITIALIZATION_DATA_1Async(OutputParameter<int> returnValue = null, CancellationToken cancellationToken = default)
@@ -82,11 +83,11 @@ namespace FluentUIExperiments.Models1
                 parameterreturnValue,
             };
 
-            var _ = await _context.SqlQueryAsync<USP_GET_INITIALIZATION_DATA_1Result>("EXEC @returnValue = [dbo].[USP_GET_INITIALIZATION_DATA_1]", sqlParameters, cancellationToken);
+            var results = await _context.SqlQueryAsync<USP_GET_INITIALIZATION_DATA_1Result>("EXEC @returnValue = [dbo].[USP_GET_INITIALIZATION_DATA_1]", sqlParameters, cancellationToken);
 
             returnValue?.SetValue(parameterreturnValue.Value);
 
-            return _;
+            return results;
         }
     }
 }

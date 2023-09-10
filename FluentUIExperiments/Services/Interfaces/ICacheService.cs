@@ -11,6 +11,7 @@ public interface ICacheService
     Task<IReadOnlyList<TypeOfInstrument>> GetTypesOfInstrumentsAsync(CancellationToken token = default);
     Task<IReadOnlyList<TypeOfWork>> GetTypesOfWorkAsync(CancellationToken token = default);
     Task<IReadOnlyList<TypeOfCountBy>> GetTypesOfCountBysAsync(CancellationToken token = default);
-    Task LoadCacheAsync();
+    Task RefreshCacheAsync();
     Task<IReadOnlyList<FilterData>> GetFilterDataAsync(CancellationToken token = default);
+    Task<FilterInformation> GetFilterInformationAsync(CancellationToken token = default);
 }

@@ -21,7 +21,6 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
     #region Fields
 
     private bool _isInitialized;
-
     private readonly IOptions<AppSettings> _options;
     private readonly ICacheService _cacheService;
     private readonly ILogger<WorkflowViewModel> _logger;
@@ -37,6 +36,12 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
 
     [ObservableProperty]
     private IEnumerable<int> _numberOfUnits = new[] { 1, 10, 50, 100 };
+
+    [ObservableProperty]
+    private IEnumerable<DataCenter> _dataCenters = Enumerable.Empty<DataCenter>();
+
+    [ObservableProperty]
+    private DataCenter _selectedDataCenter;
 
     [ObservableProperty]
     private IEnumerable<County> _counties = Enumerable.Empty<County>();
@@ -76,6 +81,9 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
 
     [ObservableProperty]
     private bool _includeAvailableWork;
+
+    [ObservableProperty]
+    private bool _saveLastFilterSettings;
 
     [ObservableProperty]
     private int _receivedValue;
@@ -167,6 +175,7 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
             TypesOfCountBys = filterData.GetTypesOfCountBy();
 
             SelectedNumberOfUnits = 50;
+            SaveLastFilterSettings = true;
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -42,9 +43,10 @@ public class ApplicationDbContext : DbContext
 
     public async Task<IReadOnlyList<FilterData>> GetFilterDataAsync(CancellationToken token = default)
     {
-        return await FilterData.FromSqlRaw("[dbo].[uspGetFilterData]")
-                               .AsNoTracking()
-                               .ToListAsync(token);
+        return await FilterData
+            .FromSqlRaw("SELECT * FROM [dbo].[ufnGetFilterData]()")
+            .AsNoTracking()
+            .ToListAsync(token);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -56,7 +58,5 @@ public class ApplicationDbContext : DbContext
         {
             builder.HasParameter("id");
         });
-
-        modelBuilder.Entity<FilterData>(entity => entity.HasNoKey());
     }
 }
