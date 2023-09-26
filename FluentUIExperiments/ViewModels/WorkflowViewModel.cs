@@ -165,6 +165,8 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
             EnableControls(true);
         }
 
+        return;
+
         async Task InitializeViewModelAsync()
         {
             var filterData = await _cacheService.GetFilterDataAsync();

@@ -99,7 +99,6 @@ public partial class MainWindowViewModel : ObservableRecipient, INavigationAware
     {
     }
 
-
     public void OnNavigatedTo()
     {
         IsActive = true;
