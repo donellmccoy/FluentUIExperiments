@@ -94,7 +94,7 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
 
     #region Constructors
 
-    public WorkflowViewModel(IOptions<AppSettings> options, ICacheService cacheService, ILogger<WorkflowViewModel> logger)
+    public WorkflowViewModel(IOptions<AppSettings> options, ICacheService cacheService, ILogger<WorkflowViewModel> logger) : base(logger)
     {
         _options = options;
         _cacheService = cacheService;
@@ -120,13 +120,13 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
     [RelayCommand(CanExecute = nameof(CanCompletedUserEvents), AllowConcurrentExecutions = false, FlowExceptionsToTaskScheduler = true)]
     private async Task GetCompletedUserEventsAsync()
     {
-        EnableControls(false);
-        SendBusyMessage(BusyType.Busy);
+        SetEnabledState(false);
+        SetBusyState(BusyStateType.Busy);
 
         await Task.Delay(2000);
 
-        SendBusyMessage(BusyType.NotBusy);
-        EnableControls(true);
+        SetBusyState(BusyStateType.NotBusy);
+        SetEnabledState(true);
     }
 
     private static bool CanCompletedUserEvents()
@@ -147,43 +147,37 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
 
         try
         {
-            EnableControls(false);
-            SendBusyMessage(BusyType.Busy);
+            SetEnabledState(false);
+            SetBusyState(BusyStateType.Busy);
 
             await InitializeViewModelAsync();
-
-            _isInitialized = true;
         }
-        catch (AggregateException ex)
+        catch (Exception ex)
         {
-            _isInitialized = false;
-            _logger.LogError("exception: {exception}", ex);
+            HandleException(ex);
+            SetInitializationState(false);
+            //show error message
         }
         finally
         {
-            SendBusyMessage(BusyType.NotBusy);
-            EnableControls(true);
+            SetBusyState(BusyStateType.NotBusy);
+            SetEnabledState(true);
         }
 
         return;
 
         async Task InitializeViewModelAsync()
         {
-            var filterData = await _cacheService.GetFilterDataAsync();
+            var data = await _cacheService.GetFilterDataAsync();
 
-            Counties = filterData.GetCounties();
-            TypesOfInstruments = filterData.GetTypesOfInstruments();
-            TypesOfWork = filterData.GetTypesOfWork();
-            TypesOfCountBys = filterData.GetTypesOfCountBy();
+            Counties = data.GetCounties();
+            TypesOfInstruments = data.GetTypesOfInstruments();
+            TypesOfWork = data.GetTypesOfWork();
+            TypesOfCountBys = data.GetTypesOfCountBy();
 
             SelectedNumberOfUnits = 50;
             SaveLastFilterSettings = true;
         }
-    }
-
-    private void EnableControls(bool isEnabled)
-    {
-        IsEnabled = isEnabled;
     }
 
     protected override void OnDeactivated()
@@ -199,6 +193,21 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
     public void OnNavigatedFrom()
     {
         Activate(false);
+    }
+
+    private void SetInitializationState(bool isInitialized)
+    {
+        _isInitialized = isInitialized;
+    }
+
+    private void SetEnabledState(bool isEnabled)
+    {
+        IsEnabled = isEnabled;
+    }
+
+    private void SetReadOnlyState(bool isReadOnly)
+    {
+        IsReadOnly = isReadOnly;
     }
 
     #endregion

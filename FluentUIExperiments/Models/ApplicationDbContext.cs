@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +13,7 @@ public class ApplicationDbContext : DbContext
     {
     }
 
-    public DbSet<TypeOfWork> TypeOfWorks
+    public DbSet<TypeOfWork> TypesOfWork
     {
         get; set;
     }
@@ -53,7 +52,6 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        //configuration for calling a user-defined scalar valued function
         modelBuilder.HasDbFunction(typeof(ApplicationDbContext).GetMethod(nameof(GetCountOfSomethingById)), builder =>
         {
             builder.HasParameter("id");

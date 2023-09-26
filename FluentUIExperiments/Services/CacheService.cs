@@ -41,15 +41,6 @@ public class CacheService : ICacheService
         _ = await GetFilterDataAsync();
     }
 
-    public async Task<FilterInformation> GetFilterInformationAsync(CancellationToken token = default)
-    {
-        return await _cache.GetOrCreateAsync(CacheKeys.FilterData, async entry =>
-        {
-            entry.SetAbsoluteExpiration(_cacheOptions.AbsoluteExpiration);
-            return new FilterInformation(await _dataService.GetFilterDataAsync(token));
-        });
-    }
-
     public async Task<IReadOnlyList<FilterData>> GetFilterDataAsync(CancellationToken token = default)
     {
         return await _cache.GetOrCreateAsync(CacheKeys.FilterData, entry =>

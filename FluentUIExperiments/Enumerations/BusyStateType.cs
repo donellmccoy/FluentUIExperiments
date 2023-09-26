@@ -1,6 +1,6 @@
 ﻿namespace FluentUIExperiments.Enumerations;
 
-public enum BusyType
+public enum BusyStateType
 {
     Busy,
     NotBusy

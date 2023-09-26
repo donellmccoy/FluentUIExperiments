@@ -78,7 +78,7 @@ public class DataService : IDataService
         return await ExecuteWithRetryAsync(async () =>
         {
             await using var context = await _factory.CreateDbContextAsync(token);
-            return await context.TypeOfWorks.AsNoTracking().ToListAsync(token);
+            return await context.TypesOfWork.AsNoTracking().ToListAsync(token);
         });
     }
 

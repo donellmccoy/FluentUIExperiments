@@ -10,7 +10,7 @@ public static class FilterInformationExtensions
     public static IEnumerable<County> GetCounties(this IReadOnlyList<FilterData> filterData)
     {
         return filterData
-            .Where(p => string.Equals(p.Discriminator, DiscriminatorNames.Counties, StringComparison.OrdinalIgnoreCase))
+            .Where(data => string.Equals(data.Discriminator, DiscriminatorNames.County, StringComparison.OrdinalIgnoreCase))
             .Select(data => new County
             {
                 CountyId = data.Id,
@@ -24,53 +24,53 @@ public static class FilterInformationExtensions
     public static IEnumerable<TypeOfInstrument> GetTypesOfInstruments(this IReadOnlyList<FilterData> filterData)
     {
         return filterData
-            .Where(p => string.Equals(p.Discriminator, DiscriminatorNames.TypeOfInstruments, StringComparison.OrdinalIgnoreCase))
-            .Select(p => new TypeOfInstrument
+            .Where(data => string.Equals(data.Discriminator, DiscriminatorNames.TypeOfInstrument, StringComparison.OrdinalIgnoreCase))
+            .Select(data => new TypeOfInstrument
             {
-                TypeOfInstrumentId = p.Id,
-                Name = p.Name,
-                Description = p.Description,
-                IsEnabled = p.IsEnabled,
-                IsVisible = p.IsVisible
+                TypeOfInstrumentId = data.Id,
+                Name = data.Name,
+                Description = data.Description,
+                IsEnabled = data.IsEnabled,
+                IsVisible = data.IsVisible
             });
     }
 
     public static IEnumerable<TypeOfWork> GetTypesOfWork(this IReadOnlyList<FilterData> filterData)
     {
         return filterData
-            .Where(p => string.Equals(p.Discriminator, DiscriminatorNames.TypeOfWorks, StringComparison.OrdinalIgnoreCase))
-            .Select(p => new TypeOfWork
+            .Where(data => string.Equals(data.Discriminator, DiscriminatorNames.TypeOfWork, StringComparison.OrdinalIgnoreCase))
+            .Select(data => new TypeOfWork
             {
-                TypeOfWorkId = p.Id,
-                Name = p.Name,
-                Description = p.Description,
-                IsEnabled = p.IsEnabled,
-                IsVisible = p.IsVisible
+                TypeOfWorkId = data.Id,
+                Name = data.Name,
+                Description = data.Description,
+                IsEnabled = data.IsEnabled,
+                IsVisible = data.IsVisible
             });
     }
 
     public static IEnumerable<TypeOfCountBy> GetTypesOfCountBy(this IReadOnlyList<FilterData> filterData)
     {
         return filterData
-            .Where(p => string.Equals(p.Discriminator, DiscriminatorNames.TypeOfCountBys, StringComparison.OrdinalIgnoreCase))
-            .Select(p => new TypeOfCountBy
+            .Where(data => string.Equals(data.Discriminator, DiscriminatorNames.TypeOfCountBy, StringComparison.OrdinalIgnoreCase))
+            .Select(data => new TypeOfCountBy
             {
-                TypeOfCountById = p.Id,
-                Name = p.Name,
-                Description = p.Description,
-                IsEnabled = p.IsEnabled,
-                IsVisible = p.IsVisible
+                TypeOfCountById = data.Id,
+                Name = data.Name,
+                Description = data.Description,
+                IsEnabled = data.IsEnabled,
+                IsVisible = data.IsVisible
             });
     }
 
     private static class DiscriminatorNames
     {
-        public const string Counties = nameof(Counties);
+        public const string County = nameof(County);
 
-        public const string TypeOfInstruments = nameof(TypeOfInstruments);
+        public const string TypeOfInstrument = nameof(TypeOfInstrument);
 
-        public const string TypeOfWorks = nameof(TypeOfWorks);
+        public const string TypeOfWork = nameof(TypeOfWork);
 
-        public const string TypeOfCountBys = nameof(TypeOfCountBys);
+        public const string TypeOfCountBy = nameof(TypeOfCountBy);
     }
 }

@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:converters="clr-namespace:FluentUIExperiments.Converters"
     Title="WorkflowPage"
     d:Background="{DynamicResource ApplicationBackgroundBrush}"
     d:DataContext="{d:DesignInstance local:WorkflowPage,
@@ -25,6 +26,7 @@
                 <x:Type TypeName="enumerations:Status" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+        <converters:BooleanToReverseConverter x:Key="BooleanToReverseBooleanConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </ui:UiPage.Resources>
     <Grid>
