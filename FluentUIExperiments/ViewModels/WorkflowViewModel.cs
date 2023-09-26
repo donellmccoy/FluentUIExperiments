@@ -138,6 +138,16 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
 
     #region Methods
 
+    public void OnNavigatedTo()
+    {
+        Activate(true);
+    }
+
+    public void OnNavigatedFrom()
+    {
+        Activate(false);
+    }
+
     protected async override void OnActivated()
     {
         if (_isInitialized)
@@ -183,16 +193,6 @@ public partial class WorkflowViewModel : ViewModelBase, INavigationAware
     protected override void OnDeactivated()
     {
 
-    }
-
-    public void OnNavigatedTo()
-    {
-        Activate(true);
-    }
-
-    public void OnNavigatedFrom()
-    {
-        Activate(false);
     }
 
     private void SetInitializationState(bool isInitialized)
