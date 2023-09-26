@@ -4,15 +4,18 @@ using Wpf.Ui.Mvvm.Contracts;
 
 namespace FluentUIExperiments.Services;
 
-/// <summary>
-/// Service that provides pages for navigation.
-/// </summary>
 public class PageService : IPageService
 {
+    #region Fields
+
     /// <summary>
     /// Service which provides the instances of pages.
     /// </summary>
     private readonly IServiceProvider _serviceProvider;
+
+    #endregion
+
+    #region Constructors
 
     /// <summary>
     /// Creates new instance and attaches the <see cref="IServiceProvider"/>.
@@ -21,6 +24,10 @@ public class PageService : IPageService
     {
         _serviceProvider = serviceProvider;
     }
+
+    #endregion
+
+    #region Methods
 
     /// <inheritdoc />
     public T GetPage<T>() where T : class
@@ -43,4 +50,6 @@ public class PageService : IPageService
 
         return _serviceProvider.GetService(pageType) as FrameworkElement;
     }
+
+    #endregion
 }
