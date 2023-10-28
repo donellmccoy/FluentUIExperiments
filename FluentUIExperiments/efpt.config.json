@@ -16,15 +16,11 @@
    "T4TemplatePath": null,
    "Tables": [
       {
-         "Name": "[dbo].[USP_GET_INITIALIZATION_DATA_1]",
-         "ObjectType": 1
-      },
-      {
-         "Name": "[dbo].[USP_GET_INITIALIZATION_DATA]",
-         "ObjectType": 1
+         "Name": "[HumanResources].[Department]",
+         "ObjectType": 0
       }
    ],
-   "UiHint": "(localdb)\\MSSQLLocalDB.DataCenterWorkflow",
+   "UiHint": "desktop-91fgoh1.AdventureWorks2022.dbo",
    "UncountableWords": null,
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": false,
@@ -37,6 +33,7 @@
    "UseLegacyPluralizer": false,
    "UseManyToManyEntity": false,
    "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
    "UseNoObjectFilter": false,
    "UseNodaTime": false,
    "UseNullableReferences": false,
